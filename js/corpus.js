@@ -1,25 +1,3 @@
-// on click of buttons, call data transition
-$("#similarityAll").click( function() {
-  d3.json("json/influence.json", function(error, json) {
-    if (error) return console.warn(error);
-    makeScatterplot(json, "similarityAll");
-  });
-});
-
-$("#similarityEarlier").click( function() {
-  d3.json("json/influence.json", function(error, json) {
-    if (error) return console.warn(error);
-    makeScatterplot(json, "similarityEarlier");
-  });
-});
-
-$("#similarityLater").click( function() {
-  d3.json("json/influence.json", function(error, json) {
-    if (error) return console.warn(error);
-    makeScatterplot(json, "similarityLater");
-  });
-});
-
 ////////////////////////////
 // initialize scatterplot //
 ////////////////////////////
@@ -29,6 +7,25 @@ var w = 900 - margin.left - margin.right;
 var h = 500 - margin.top - margin.bottom;
 
 var initializeScatterplot = function() {
+
+  // append the div to which we'll attach the plot
+  d3.select("#plot").html(
+
+    '<div id="buttonContainer" class="row text-center">' +
+      '<p><b>Compare each document to</b>' +
+        '<button type="button" class="btn btn-default"' + 
+            'id="similarityAll" autofocus="true">All</button>' +
+        '<button type="button" class="btn btn-default"' +
+             'id="similarityEarlier">Earlier</button>' +
+        '<button type="button" class="btn btn-default"' +
+             'id="similarityLater">Later</button>' +
+      '<b>works:</b>' +
+      '</p>' +
+    '</div>' +
+    '<div id="corpusPlotContainer" class="text-center">' +
+      '<div id="corpusPlot"></div>' +
+    '</div>'
+  );
 
   var svg = d3.select("#corpusPlot").append("svg")
     .attr("width", w + margin.left + margin.right)
@@ -66,6 +63,30 @@ var initializeScatterplot = function() {
     .style("font-weight", "normal")
     .attr("transform", "rotate(-90)")
     .text("Mean similarity");
+
+  // add jQuery listeners to buttons: on click 
+  // call data transformation
+  $("#similarityAll").click( function() {
+    d3.json("json/influence.json", function(error, json) {
+      if (error) return console.warn(error);
+      makeScatterplot(json, "similarityAll");
+    });
+  });
+
+  $("#similarityEarlier").click( function() {
+    d3.json("json/influence.json", function(error, json) {
+      if (error) return console.warn(error);
+      makeScatterplot(json, "similarityEarlier");
+    });
+  });
+
+  $("#similarityLater").click( function() {
+    d3.json("json/influence.json", function(error, json) {
+      if (error) return console.warn(error);
+      makeScatterplot(json, "similarityLater");
+    });
+  });
+
 }
 
 initializeScatterplot();
