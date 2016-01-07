@@ -169,25 +169,7 @@ var makeScatterplot = function(data, similarityKey) {
     .attr("r", 4)
     .attr("style", "cursor: pointer;")
     .attr("stroke", function(d) {return colors(d.year)})
-    .on("mouseover", function(d) {
-      tooltip.transition()
-      .style("opacity", .90);  
-      tooltip.html(d.title) 
-        .style("left", (parseInt(d3.select(this).attr("cx")) + 
-          document.getElementById("corpusPlot").offsetLeft) + 
-          10 + "px")     
-        .style("top", (parseInt(d3.select(this).attr("cy")) +
-          document.getElementById("corpusPlot").offsetTop) - 
-          12 + "px") 
-        .style("background-color", '#ffffff')
-        .style("width", getTextWidth(d.title, fontSpec) + 2 + "px")
-        .style("height", 15 + "px"); 
-      })
-    .on("mouseout", function(d) {
-      tooltip.transition()
-      .duration(500)
-      .style("opacity", 0);
-    })    
+    .attr("title", function(d) {return d.title})
 
   .transition()
     .duration(500)
@@ -196,13 +178,21 @@ var makeScatterplot = function(data, similarityKey) {
 
   circles.exit()
     .remove();
- 
+
+  // add tooltip
+  $("circle.scatterPoint").tooltip({
+      'container': 'body',
+      'placement': 'right'
+  });
+
 };
 
 // initialize scatterplot with "similarityAll" data
 d3.json("json/influence.json", function(error, json) {
-  console.log(json);
   if (error) return console.warn(error);
   makeScatterplot(json, "similarityAll");
 });
+
+
+
 
