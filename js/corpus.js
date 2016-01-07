@@ -1,12 +1,15 @@
+// TODO: factor out margin, w, h into function
+
 ////////////////////////////
-// initialize scatterplot //
+// initialize corpus plot //
 ////////////////////////////
 
-var margin = {top: 0, right: 70, left: 70, bottom: 50};   
-var w = 900 - margin.left - margin.right;
-var h = 500 - margin.top - margin.bottom;
+var initializeCorpusPlot = function() {
 
-var initializeScatterplot = function() {
+  // specify plot size and margins
+  var margin = {top: 0, right: 70, left: 70, bottom: 50};   
+  var w = 900 - margin.left - margin.right;
+  var h = 500 - margin.top - margin.bottom;
 
   // append the div to which we'll attach the plot
   d3.select("#plot").html(
@@ -69,50 +72,38 @@ var initializeScatterplot = function() {
   $("#similarityAll").click( function() {
     d3.json("json/influence.json", function(error, json) {
       if (error) return console.warn(error);
-      makeScatterplot(json, "similarityAll");
+      updateCorpusPlot(json, "similarityAll");
     });
   });
 
   $("#similarityEarlier").click( function() {
     d3.json("json/influence.json", function(error, json) {
       if (error) return console.warn(error);
-      makeScatterplot(json, "similarityEarlier");
+      updateCorpusPlot(json, "similarityEarlier");
     });
   });
 
   $("#similarityLater").click( function() {
     d3.json("json/influence.json", function(error, json) {
       if (error) return console.warn(error);
-      makeScatterplot(json, "similarityLater");
+      updateCorpusPlot(json, "similarityLater");
     });
   });
 
 }
 
-initializeScatterplot();
-
-/////////////////////
-// tooltip helpers //
-/////////////////////
-
-function getTextWidth(text, font) {
-  // re-use canvas object for better performance
-  var canvas = getTextWidth.canvas || (getTextWidth.canvas = 
-        document.createElement("canvas"));
-  var context = canvas.getContext("2d");
-  context.font = font;
-  var metrics = context.measureText(text);
-  return metrics.width;
-};
-
-var fontSpec = "13pt Arial";
-
+initializeCorpusPlot();
 
 //////////////////////
 // make scatterplot //
 //////////////////////
 
-var makeScatterplot = function(data, similarityKey) {
+var updateCorpusPlot = function(data, similarityKey) {
+
+  // specify plot size and margins
+  var margin = {top: 0, right: 70, left: 70, bottom: 50};   
+  var w = 900 - margin.left - margin.right;
+  var h = 500 - margin.top - margin.bottom;
 
   var svg = d3.select("#corpusPlot").select("svg");
 
@@ -211,9 +202,6 @@ var makeScatterplot = function(data, similarityKey) {
 // initialize scatterplot with "similarityAll" data
 d3.json("json/influence.json", function(error, json) {
   if (error) return console.warn(error);
-  makeScatterplot(json, "similarityAll");
+  updateCorpusPlot(json, "similarityAll");
 });
-
-
-
 
