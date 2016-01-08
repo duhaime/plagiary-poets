@@ -103,7 +103,10 @@ var initializePassagePlot = function(sourceId) {
   // remove their tooltip arrows,
   // and create the new required html
   // for the passage plot
-  d3.select("#corpus-plot").remove();
+  d3.select("#corpus-plot").select("#buttonContainer").remove();
+  d3.select("#corpus-plot").select("#corpusPlotContainer").remove();
+  d3.select("#corpus-plot")
+    .style("padding", "0px 0px");
   d3.select("#passage-plot")
     .style("padding","150px 0px");
   d3.selectAll(".tooltip-inner").remove();
@@ -394,23 +397,22 @@ var updatePassagePlot = function(data) {
 
 
 
-
-
-
-
-
-
-
 ////////////////////////////
 // initialize corpus plot //
 ////////////////////////////
 
 var initializeCorpusPlot = function() {
 
-  // on plot initialization, remove passage svg
-  d3.select("#passage-plot").select("svg")
-    .remove();
-
+  // on plot initialization, remove passage view divs
+  // and reset the margin on passage view to 0 0 
+  d3.select("#textSelectorContainer").remove();
+  d3.select("#passagePlot").remove();
+  d3.select("#textContainer").remove();
+  d3.select("#passage-plot")
+    .style("padding", "0px 0px");
+  d3.select("#corpus-plot")
+    .style("padding","150px 0px");
+ 
   // specify plot size and margins
   var margin = {top: 0, right: 70, left: 70, bottom: 50};   
   var w = 900 - margin.left - margin.right;
@@ -618,4 +620,11 @@ var updateCorpusPlot = function(data, similarityKey) {
 // data display
 initializeCorpusPlot();
 
+// add listeners to reset the plot div when user clicks button
+$("#corpus-plot-link").click(function() {
+  initializeCorpusPlot();
+});
 
+$("#passage-plot-link").click(function() {
+  initializePassagePlot();
+});
