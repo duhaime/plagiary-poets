@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,11 +14,17 @@
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
+    <!-- Custom Framework CSS -->
     <link href="css/agency.css" rel="stylesheet">
 
-    <!-- Plot CSS -->
+    <!-- Corpus Plot CSS -->
     <link href="css/corpus.css" rel="stylesheet">
+
+    <!-- Passage Plot CSS -->
+    <link href="css/passage.css" rel="stylesheet">
+
+    <!-- Typeahead CSS -->
+    <link href="css/typeahead.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -61,11 +67,11 @@
                     <li>
                         <a class="page-scroll" href="#services">Overview</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#corpus-plot">Corpus Plot</a>
+                    <li id="corpus-plot-link">
+                        <a class="page-scroll" href="#corpus-plot">Corpus View</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#passage-plot">Passage Plot</a>
+                    <li id="passage-plot-link">
+                        <a class="page-scroll" href="#passage-plot">Passage View</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#portfolio">About</a>
@@ -88,12 +94,12 @@
         </div>
     </header>
 
-    <!-- Services Section -->
+    <!-- Overview Section -->
     <section id="services">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Services</h2>
+                    <h2 class="section-heading">Overview</h2>
                     <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
                 </div>
             </div>
@@ -105,7 +111,7 @@
                     <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i>
                   </span>
                 </a>
-                <h4 class="service-heading">E-Commerce</h4>
+                <h4 class="service-heading">Lorem</h4>
                 <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
                 </div>
                 <div class="col-md-4">
@@ -113,7 +119,7 @@
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-area-chart fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Responsive Design</h4>
+                    <h4 class="service-heading">Lorem</h4>
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
                 </div>
                 <div class="col-md-4">
@@ -121,7 +127,7 @@
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-code-fork fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Web Security</h4>
+                    <h4 class="service-heading">Lorem</h4>
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
                 </div>
             </div>
@@ -134,7 +140,7 @@
     </section>
 
     <!-- Passage Plot Section -->
-    <section id="passage-plot" class="bg-light-gray">
+    <section id="passage-plot" class="bg-light-gray" style="padding:0px">
       <div class="container"></div>
     </section>
  
@@ -407,12 +413,9 @@
     <script src="js/d3.v3.min.js"></script>
 
     <!-- Corpus Plot JavaScript -->
+    <script src="js/typeahead.bundle.js"></script> 
+    <script src="js/simpleTypeAhead.js"></script>
     <script src="js/corpus.js"></script>      
 
-    <!-- Passage Plot JavaScript -->
-    <script src="js/passage.js"></script>
-    <script src="js/simpleTypeAhead.js"></script>
- 
 </body>
-
 </html>
