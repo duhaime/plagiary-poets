@@ -12,9 +12,6 @@
 
 // function that makes the plotting call
 var callPassagePlot = function (sourceId) {
-
-  console.log("received sourceId");
-
   var alignmentsDir = "json/alignments/"; 
   var alignmentsFile = sourceId + "_alignments.json";
   var alignmentsPath = alignmentsDir + alignmentsFile;
@@ -103,7 +100,9 @@ var initializePassagePlot = function(sourceId) {
   // remove corpus plot div,
   // restore padding on passage plot,
   // remove any tooltips currently active,
-  // and remove their tooltip arrows
+  // remove their tooltip arrows,
+  // and create the new required html
+  // for the passage plot
   d3.select("#corpus-plot").remove();
   d3.select("#passage-plot")
     .style("padding","150px 0px");
@@ -112,8 +111,8 @@ var initializePassagePlot = function(sourceId) {
 
   d3.select("#passage-plot").html(
     '<div id="textSelectorContainer">' +
-      '<div id="scrollable-dropdown-menu">' +
-        '<input class="typeahead center" type="text" placeholder="Texts in corpus">' +
+      '<div id="scrollable-dropdown-menu" class="center">' +
+        '<input class="typeahead" type="text" placeholder="Texts in corpus">' +
       '</div>' +
     '</div>' +
     '<div id="passagePlot" style="text-align: center;"></div>' +
@@ -128,6 +127,10 @@ var initializePassagePlot = function(sourceId) {
       '</div>' +
     '</div>' 
   );
+
+  // after creating the passage plot html,
+  // initialize the typeahead dropdown
+  initializeDropdown();
 
   // width and height for the scatter plot and time axis
   var margin = {top: 70, right: 420, left: 70, bottom: 50};   
@@ -195,6 +198,16 @@ var initializePassagePlot = function(sourceId) {
   // create plot using source Id for 
   // the initial view
   callPassagePlot(sourceId);
+
+  // remove the active class from the "corpus view" nav link
+  var navbarSelector = $(".nav.navbar-nav.navbar-right");
+  navbarSelector.find(".active").removeClass("active");
+  var navbarLinks = navbarSelector.find("li");
+
+  // apply the active view to the "passage view" nav link
+  var passagePlotLink = navbarLinks[3];
+  $(passagePlotLink).addClass("active");
+
 };
 
 
