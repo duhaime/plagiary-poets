@@ -130,7 +130,8 @@ var initializePassagePlot = function(sourceId) {
 
   // after creating the passage plot html,
   // initialize the typeahead dropdown
-  initializeDropdown();
+  initializePassageTypeahead();
+  addPassageTypeaheadListener();
 
   // width and height for the scatter plot and time axis
   var margin = {top: 70, right: 420, left: 70, bottom: 50};   
