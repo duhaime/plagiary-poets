@@ -6,18 +6,21 @@
 
 var initializeCorpusPlot = function() {
 
+  // on plot initialization, remove passage svg
+  d3.select("#passage-plot").select("svg")
+    .remove();
+
   // specify plot size and margins
   var margin = {top: 0, right: 70, left: 70, bottom: 50};   
   var w = 900 - margin.left - margin.right;
   var h = 500 - margin.top - margin.bottom;
 
   // append the div to which we'll attach the plot
-  d3.select("#plot").html(
-
+  d3.select("#corpus-plot").html(
     '<div id="buttonContainer" class="row text-center">' +
       '<p><b>Compare each document to</b>' +
         '<button type="button" class="btn btn-default"' + 
-            'id="similarityAll" autofocus="true">All</button>' +
+            'id="similarityAll">All</button>' +
         '<button type="button" class="btn btn-default"' +
              'id="similarityEarlier">Earlier</button>' +
         '<button type="button" class="btn btn-default"' +
@@ -77,6 +80,9 @@ var initializeCorpusPlot = function() {
   });
 
   $("#similarityEarlier").click( function() {
+    // remove the active state of the similarityAll button
+    $("#similarityAll").removeClass("active");
+    // make call for json data and update plot
     d3.json("json/influence.json", function(error, json) {
       if (error) return console.warn(error);
       updateCorpusPlot(json, "similarityEarlier");
@@ -84,15 +90,22 @@ var initializeCorpusPlot = function() {
   });
 
   $("#similarityLater").click( function() {
+    // remove the active state of the similarityAll button
+    $("#similarityAll").removeClass("active");
+    // make call for json data and update plot
     d3.json("json/influence.json", function(error, json) {
       if (error) return console.warn(error);
       updateCorpusPlot(json, "similarityLater");
     });
   });
 
-}
+  // use jQuery to click the selectAll button
+  // in order to initlize the plot
+  $("#similarityAll").trigger("click");
 
-initializeCorpusPlot();
+  // set the button's state to active
+  $("#similarityAll").toggleClass("active"); 
+};
 
 //////////////////////
 // make scatterplot //
@@ -196,12 +209,10 @@ var updateCorpusPlot = function(data, similarityKey) {
       'container': 'body',
       'placement': 'right'
   });
-
 };
 
-// initialize scatterplot with "similarityAll" data
-d3.json("json/influence.json", function(error, json) {
-  if (error) return console.warn(error);
-  updateCorpusPlot(json, "similarityAll");
-});
+// initialize the plot, which will in turn set the inital
+// data display
+initializeCorpusPlot();
+
 
