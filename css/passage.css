@@ -37,8 +37,9 @@ svg circle:active {
 
 .textBox {
   width: 450px;
-  height: 400px;
+  height: 390px;
   float: left;
+  overflow-y: scroll;
 }
 
 .textBox h4 {
