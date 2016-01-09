@@ -626,5 +626,5 @@ $("#corpus-plot-link").click(function() {
 });
 
 $("#passage-plot-link").click(function() {
-  initializePassagePlot();
+  initializePassagePlot(0);
 });
