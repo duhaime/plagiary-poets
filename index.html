@@ -136,12 +136,41 @@
 
     <!-- Corpus Plot Section -->
     <section id="corpus-plot" class="bg-light-gray">
-      <div class="container"></div>
+      <div class="container">
+        <div id="buttonContainer" class="row text-center">
+          <p><b style="margin-right:5px;">Plotting the most</b>
+            <button type="button" class="btn btn-default" id="influential" 
+                style="margin-right:5px;">Influential</button>
+            <button type="button" class="btn btn-default" id="imitative">Imitative</button>
+            <b style="margin-left:5px;">poems in the corpus</b>
+          </p>
+        </div>
+      <div id="corpusPlotContainer" class="text-center">
+        <div id="corpusPlot"></div>
+      </div>
     </section>
 
     <!-- Passage Plot Section -->
-    <section id="passage-plot" class="bg-light-gray" style="padding:0px">
-      <div class="container"></div>
+    <section id="passage-plot" class="bg-light-gray">
+      <div class="container">
+         <div id="textSelectorContainer">
+            <div id="scrollable-dropdown-menu" class="center">
+              <input class="typeahead" type="text" placeholder="Texts in corpus">
+            </div>
+          </div>
+          <div id="passagePlot" style="text-align: center;"></div>
+          <div id="textContainer">
+            <div class="textBox">
+              <h4 id="titleLeft"><p style="font-weight:normal;"></p></h4>
+              <p class="textBox" id="textLeft"></p>
+            </div>
+            <div class="textBox">
+              <h4 id="titleRight"></h4>
+              <p class="textBox" id="textRight"></p>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
  
     
