@@ -21,7 +21,7 @@ var substringMatcher = function(strs) {
 };
 
 
-var initializePassageTypeahead = function () {
+var initializePassageTypeahead = function (sourceId) {
   $.getJSON( "json/dropdown.json", function( jsonResponse ) {
     dropdownJson = jsonResponse;
     var corpusRecords = [];
@@ -44,9 +44,8 @@ var initializePassageTypeahead = function () {
 
     });
 
-    // Set initial text box selection and populate graph 
-    //$('.typeahead').typeahead('val', corpusRecords[0].name);
-    //makePlotCall(corpusRecords[0].id); 
+    // Set the first text's title as the initial typeahead value
+    $('.typeahead').typeahead('val', corpusRecords[0].name); 
   });
 };
 
