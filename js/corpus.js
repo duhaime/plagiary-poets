@@ -11,14 +11,11 @@
 ///////////////////////////////////////
 
 // function that makes the plotting call
-var callPassagePlot = function (sourceId, sourceTitle) {
+var callPassagePlot = function (sourceId) {
   var alignmentsDir = "json/alignments/"; 
   var alignmentsFile = sourceId + "_alignments.json";
   var alignmentsPath = alignmentsDir + alignmentsFile
 
-  // Set the selected text's title as the new typeahead value
-  $('.typeahead').typeahead('val', sourceTitle); 
- 
   $.getJSON( alignmentsPath, function( jsonResponse ) {
     updatePassagePlot( jsonResponse );
   });
@@ -98,7 +95,7 @@ var dataKey = function(d) {
 
 
 // initialize plot by appending required assets to DOM
-var initializePassagePlot = function(sourceId) {
+var initializePassagePlot = function() {
 
   // initialize the typeahead dropdown
   initializePassageTypeahead();
@@ -169,7 +166,7 @@ var initializePassagePlot = function(sourceId) {
 
   // create plot using source Id for 
   // the initial view
-  callPassagePlot(sourceId);
+  callPassagePlot(0);
 
 };
 
@@ -188,17 +185,22 @@ var updatePassagePlot = function(data) {
   var timeAxisGroup = d3.select("#passagePlot").select(".time");
   var svg = d3.select("#passagePlot").select("svg");
 
-  console.log(data);
-
   // split data into two components
   bookendYearData = data.bookendYears.slice();
   alignmentData = data.alignments.slice();
+
+  console.log(alignmentData);
 
   // specify color scheme
   var colors = d3.scale.category20();
 
   // reset text in the textBox
   resetText();
+
+  console.log(alignmentData[0].sourceTitle);
+
+  // Set the first text's title as the typeahead value
+  $('.tt-input').typeahead('val', alignmentData[0].sourceTitle); 
 
   // specify x axis range
   var x = d3.scale.linear()
@@ -532,7 +534,9 @@ var updateCorpusPlot = function(data, similarityKey) {
     // on click of elements, run search in passage plot 
     // and scroll to passage plot  
     .on("click", function(d) {
-      callPassagePlot(d.id, d.title) 
+      // make call to update the plot
+      callPassagePlot(d.id, d.title);
+       
     })   
   .transition()
     .duration(500)
@@ -552,5 +556,7 @@ var updateCorpusPlot = function(data, similarityKey) {
 // initialize the plot, which will in turn set the inital
 // data display
 initializeCorpusPlot();
-initializePassagePlot(0);
+
+// initialize passage plot with the first record
+initializePassagePlot();
 
