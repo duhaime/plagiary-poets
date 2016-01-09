@@ -11,10 +11,14 @@
 ///////////////////////////////////////
 
 // function that makes the plotting call
-var callPassagePlot = function (sourceId) {
+var callPassagePlot = function (sourceId, sourceTitle) {
   var alignmentsDir = "json/alignments/"; 
   var alignmentsFile = sourceId + "_alignments.json";
-  var alignmentsPath = alignmentsDir + alignmentsFile;
+  var alignmentsPath = alignmentsDir + alignmentsFile
+
+  // Set the selected text's title as the new typeahead value
+  $('.typeahead').typeahead('val', sourceTitle); 
+ 
   $.getJSON( alignmentsPath, function( jsonResponse ) {
     updatePassagePlot( jsonResponse );
   });
@@ -528,7 +532,7 @@ var updateCorpusPlot = function(data, similarityKey) {
     // on click of elements, run search in passage plot 
     // and scroll to passage plot  
     .on("click", function(d) {
-      callPassagePlot(d.id) 
+      callPassagePlot(d.id, d.title) 
     })   
   .transition()
     .duration(500)
