@@ -184,6 +184,8 @@ var updatePassagePlot = function(data) {
   var timeAxisGroup = d3.select("#passagePlot").select(".time");
   var svg = d3.select("#passagePlot").select("svg");
 
+  console.log(data);
+
   // split data into two components
   bookendYearData = data.bookendYears.slice();
   alignmentData = data.alignments.slice();
@@ -523,9 +525,11 @@ var updateCorpusPlot = function(data, similarityKey) {
     .attr("style", "cursor: pointer;")
     .attr("stroke", function(d) {return colors(d.year)})
     .attr("title", function(d) {return d.title})
-    // on click of elements, run search in passage plot and scroll to passage plot
-    //.on("click", function(d) {initializePassagePlot(66) })   
-     
+    // on click of elements, run search in passage plot 
+    // and scroll to passage plot  
+    .on("click", function(d) {
+      callPassagePlot(d.id) 
+    })   
   .transition()
     .duration(500)
     .attr("cx", function(d) { return x(d.year) + margin.left })
