@@ -96,43 +96,6 @@ var dataKey = function(d) {
 // initialize plot by appending required assets to DOM
 var initializePassagePlot = function(sourceId) {
 
-  // on initial passage plot call: 
-  // remove corpus plot div,
-  // restore padding on passage plot,
-  // remove any tooltips currently active,
-  // remove their tooltip arrows,
-  // and create the new required html
-  // for the passage plot
-  d3.select("#corpus-plot")
-    .style("padding", "0px 0px");
-  d3.select("#passage-plot")
-    .style("padding","150px 0px");
- 
-  d3.select("#corpus-plot").select("#buttonContainer").remove();
-  d3.select("#corpus-plot").select("#corpusPlotContainer").remove();
-  d3.selectAll(".tooltip-inner").remove();
-  d3.selectAll(".tooltip-arrow").remove();
-
-  d3.select("#passage-plot").html(
-    '<div id="textSelectorContainer">' +
-      '<div id="scrollable-dropdown-menu" class="center">' +
-        '<input class="typeahead" type="text" placeholder="Texts in corpus">' +
-      '</div>' +
-    '</div>' +
-    '<div id="passagePlot" style="text-align: center;"></div>' +
-    '<div id="textContainer">' +
-      '<div class="textBox">' +
-        '<h4 id="titleLeft"><p style="font-weight:normal;"></p></h4>' +
-        '<p class="textBox" id="textLeft"></p>' +
-      '</div>' +
-      '<div class="textBox">' +
-        '<h4 id="titleRight"></h4>' +
-        '<p class="textBox" id="textRight"></p>' +
-      '</div>' +
-    '</div>' 
-  );
-
-  // after creating the passage plot html,
   // initialize the typeahead dropdown
   initializePassageTypeahead();
   addPassageTypeaheadListener();
@@ -200,11 +163,6 @@ var initializePassagePlot = function(sourceId) {
         (timeMargin.left) + 
         "," + (timeMargin.top) + ")");
 
-  // remove the active class from the "corpus view" nav link
-  $("#corpus-plot-link").removeClass("active");
-  // add active class to the "passage view" nav link
-  $("#passage-plot-link").addClass("active");
-
   // create plot using source Id for 
   // the initial view
   callPassagePlot(sourceId);
@@ -221,10 +179,10 @@ var updatePassagePlot = function(data) {
   var h = 340 - margin.top - margin.bottom;
 
   // identify divs we've already appended to DOM
-  var xAxisGroup = d3.select(".x.axis");
-  var yAxisGroup = d3.select(".y.axis");
-  var timeAxisGroup = d3.select(".time");
-  var svg = d3.select("#passage-plot").select("svg");
+  var xAxisGroup = d3.select("#passagePlot").select(".x.axis");
+  var yAxisGroup = d3.select("#passagePlot").select(".y.axis");
+  var timeAxisGroup = d3.select("#passagePlot").select(".time");
+  var svg = d3.select("#passagePlot").select("svg");
 
   // split data into two components
   bookendYearData = data.bookendYears.slice();
@@ -400,37 +358,12 @@ var updatePassagePlot = function(data) {
 
 var initializeCorpusPlot = function() {
 
-  // on plot initialization, remove passage view divs
-  // and reset the margin on passage view to 0 0 
-  d3.select("#textSelectorContainer").remove();
-  d3.select("#passagePlot").remove();
-  d3.select("#textContainer").remove();
-  d3.select("#passage-plot")
-    .style("padding", "0px 0px");
-  d3.select("#corpus-plot")
-    .style("padding","150px 0px");
- 
   // specify plot size and margins
   var margin = {top: 0, right: 70, left: 70, bottom: 50};   
   var w = 900 - margin.left - margin.right;
   var h = 500 - margin.top - margin.bottom;
 
-  // append the div to which we'll attach the plot
-  d3.select("#corpus-plot").html(
-    '<div id="buttonContainer" class="row text-center">' +
-      '<p><b style="margin-right:5px;">Plotting the most</b>' +
-        '<button type="button" class="btn btn-default"' + 
-            'id="influential" style="margin-right:5px;">Influential</button>' +
-        '<button type="button" class="btn btn-default"' +
-             'id="imitative">Imitative</button>' +
-      '<b style="margin-left:5px;">poems in the corpus</b>' +
-      '</p>' +
-    '</div>' +
-    '<div id="corpusPlotContainer" class="text-center">' +
-      '<div id="corpusPlot"></div>' +
-    '</div>'
-  );
-
+  // attach the plot to the corpusplot div
   var svg = d3.select("#corpusPlot").append("svg")
     .attr("width", w + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom);
@@ -456,6 +389,12 @@ var initializeCorpusPlot = function() {
       .style("font-weight", "normal")
       .text("Year");
 
+  // append x axis to DOM
+  var xAxisGroup = svg.append("g")
+    .attr("class","x axis")
+    .attr("transform", "translate(" + margin.left + 
+      "," + (h+margin.top) + ")");
+
   // add a label to the y axis
   svg.append("text")
     .attr("class", "y label")
@@ -467,6 +406,12 @@ var initializeCorpusPlot = function() {
     .style("font-weight", "normal")
     .attr("transform", "rotate(-90)")
     .text("Aggregate Similarity");
+
+  // append y axis to DOM
+  var yAxisGroup = svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + margin.left +
+       "," + margin.top + ")");
 
   // add jQuery listeners to buttons: on click 
   // call data transformation
@@ -510,6 +455,7 @@ var updateCorpusPlot = function(data, similarityKey) {
 
   // specify x axis range
   var x = d3.scale.linear()
+    .domain(d3.extent(data, function(d) {return d.year}))
     .range([15, w-15]);
 
   // draw x axis
@@ -517,14 +463,9 @@ var updateCorpusPlot = function(data, similarityKey) {
     .scale(x)
     .tickFormat(d3.format("d"));
 
-  // append x axis to DOM
-  var xAxisGroup = svg.append("g")
-    .attr("class","x axis")
-    .attr("transform", "translate(" + margin.left + 
-      "," + (h+margin.top) + ")");
-
   // specify y axis range
   var y = d3.scale.linear()
+    .domain(d3.extent(data, function(d) {return d[similarityKey]}))
     .range([h-15, 15]);
 
   // draw y axis
@@ -532,37 +473,25 @@ var updateCorpusPlot = function(data, similarityKey) {
     .scale(y)
     .orient("left");
          
-  // append y axis to DOM
-  var yAxisGroup = svg.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate(" + margin.left +
-       "," + margin.top + ")");
-
   // update y axis label according to plot type
   if (similarityKey == "similarityLater") {
-    d3.select(".y.label")
+    d3.select("#corpusPlot").select(".y.label")
       .text("Similarity to later poems");
   } else if (similarityKey == "similarityEarlier") {
-    d3.select(".y.label")
-      .transition()
-      .duration(500)
+    d3.select("#corpusPlot").select(".y.label")
       .text("Similarity to earlier poems");
   };
 
   // specify color scheme
   var colors = d3.scale.category20();
 
-  // set domains for x, y, and time
-  x.domain(d3.extent(data, function(d) {return d.year})); 
-  y.domain(d3.extent(data, function(d) {return d[similarityKey]}));
-
-  // draw x and y axes
-  svg.select(".y.axis")
+    // draw x and y axes
+  d3.select("#corpusPlot").select(".y.axis")
     .transition()
     .duration(1000)
     .call(yAxis);
 
-  svg.select(".x.axis")
+  d3.select("#corpusPlot").select(".x.axis")
     .call(xAxis);
 
   /////////////////////////
@@ -594,9 +523,8 @@ var updateCorpusPlot = function(data, similarityKey) {
     .attr("style", "cursor: pointer;")
     .attr("stroke", function(d) {return colors(d.year)})
     .attr("title", function(d) {return d.title})
-    // tear down the corpus plot and initialize passage plot
-    // plotting initially the clicked point's id
-    .on("click", function(d) {initializePassagePlot(66) })   
+    // on click of elements, run search in passage plot and scroll to passage plot
+    //.on("click", function(d) {initializePassagePlot(66) })   
      
   .transition()
     .duration(500)
@@ -616,12 +544,5 @@ var updateCorpusPlot = function(data, similarityKey) {
 // initialize the plot, which will in turn set the inital
 // data display
 initializeCorpusPlot();
+initializePassagePlot(0);
 
-// add listeners to reset the plot div when user clicks button
-$("#corpus-plot-link").click(function() {
-  initializeCorpusPlot();
-});
-
-$("#passage-plot-link").click(function() {
-  initializePassagePlot(0);
-});
