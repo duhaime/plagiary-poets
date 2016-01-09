@@ -103,12 +103,13 @@ var initializePassagePlot = function(sourceId) {
   // remove their tooltip arrows,
   // and create the new required html
   // for the passage plot
-  d3.select("#corpus-plot").select("#buttonContainer").remove();
-  d3.select("#corpus-plot").select("#corpusPlotContainer").remove();
   d3.select("#corpus-plot")
     .style("padding", "0px 0px");
   d3.select("#passage-plot")
     .style("padding","150px 0px");
+ 
+  d3.select("#corpus-plot").select("#buttonContainer").remove();
+  d3.select("#corpus-plot").select("#corpusPlotContainer").remove();
   d3.selectAll(".tooltip-inner").remove();
   d3.selectAll(".tooltip-arrow").remove();
 
@@ -199,18 +200,14 @@ var initializePassagePlot = function(sourceId) {
         (timeMargin.left) + 
         "," + (timeMargin.top) + ")");
 
+  // remove the active class from the "corpus view" nav link
+  $("#corpus-plot-link").removeClass("active");
+  // add active class to the "passage view" nav link
+  $("#passage-plot-link").addClass("active");
+
   // create plot using source Id for 
   // the initial view
   callPassagePlot(sourceId);
-
-  // remove the active class from the "corpus view" nav link
-  var navbarSelector = $(".nav.navbar-nav.navbar-right");
-  navbarSelector.find(".active").removeClass("active");
-  var navbarLinks = navbarSelector.find("li");
-
-  // apply the active view to the "passage view" nav link
-  var passagePlotLink = navbarLinks[3];
-  $(passagePlotLink).addClass("active");
 
 };
 
