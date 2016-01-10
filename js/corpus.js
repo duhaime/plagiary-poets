@@ -491,9 +491,9 @@ var updateCorpusPlot = function(data, similarityKey) {
 
   // create lack and white color range with domain of similarity values
   var colors = d3.scale.linear()
-    .domain([0,1])
-    .interpolate(d3.interpolateHcl)
-    .range([d3.rgb("#007AFF"), d3.rgb('#FFF500')]);
+    .domain(d3.extent(data, function(d) {return d[similarityKey]}))
+    .interpolate(d3.interpolateHcl)  
+    .range([d3.rgb("#FFF500"), d3.rgb("#007AFF")]);
 
   // draw x and y axes
   d3.select("#corpusPlot").select(".y.axis")
@@ -527,23 +527,28 @@ var updateCorpusPlot = function(data, similarityKey) {
 
   // enter: append new data points (if any)
   circles.enter()
-    .append("circle")
-    .attr("class", "scatterPoint")
-    .attr("r", 4)
-    .attr("style", "cursor: pointer;")
-    .attr("stroke", function(d) {return colors(d[similarityKey])})
-    .attr("title", function(d) {return d.title})
-    // on click of elements, run search in passage plot 
-    // and scroll to passage plot  
-    .on("click", function(d) {
-      // make call to update the plot
-      callPassagePlot(d.id, d.title);
-       
-    })   
-  .transition()
-    .duration(500)
-    .attr("cx", function(d) { return x(d.year) + margin.left })
-    .attr("cy", function(d) { return y(d[similarityKey]) + margin.top });
+    .append('g')
+    .each(function(d, i) {
+      var g = d3.select(this);
+      g.append("a")
+        .attr("xlink:href", "#passage-plot"); 
+
+      var circleLink = d3.select(this);
+      circleLink.append("circle")      
+        .attr("class", "scatterPoint")
+        .attr("r", 4)
+        .attr("style", "cursor: pointer;")
+        .attr("stroke", function(d) {return colors(d[similarityKey])})
+        .attr("title", function(d) {return d.title})
+        .on("click", function(d) {
+          // make call to update the plot
+          callPassagePlot(d.id);
+        })
+      .transition()
+        .duration(500)
+        .attr("cx", function(d) { return x(d.year) + margin.left })
+        .attr("cy", function(d) { return y(d[similarityKey]) + margin.top });
+     });
 
   circles.exit()
     .remove();
@@ -577,21 +582,20 @@ initializePassagePlot();
 */
 
 $.fn.waitUntilExists = function (handler, shouldRunHandlerOnce, isChild) {
-    var found = 'found';
-    var $this = $(this.selector);
-    var $elements = $this.not(function () { return $(this).data(found); }).each(handler).data(found, true);
-
-    if (!isChild)
-    {
-      (window.waitUntilExists_Intervals = window.waitUntilExists_Intervals || {})[this.selector] =
-        window.setInterval(function () { $this.waitUntilExists(handler, shouldRunHandlerOnce, true); }, 500)
-    ;
-    }
-    else if (shouldRunHandlerOnce && $elements.length)
-    {
-      window.clearInterval(window.waitUntilExists_Intervals[this.selector]);
-    }
-    return $this;
-}
+  var found = 'found';
+  var $this = $(this.selector);
+  var $elements = $this.not(function () { 
+    return $(this).data(found); 
+  }).each(handler).data(found, true);
+  if (!isChild) {
+    (window.waitUntilExists_Intervals = 
+      window.waitUntilExists_Intervals || {})[this.selector] =
+      window.setInterval(function () { 
+        $this.waitUntilExists(handler, shouldRunHandlerOnce, true); 
+      }, 500);
+  } else if (shouldRunHandlerOnce && $elements.length) {
+    window.clearInterval(window.waitUntilExists_Intervals[this.selector]);
+  }
+  return $this;
+  }
 }(jQuery));
-
