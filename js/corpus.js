@@ -189,19 +189,15 @@ var updatePassagePlot = function(data) {
   bookendYearData = data.bookendYears.slice();
   alignmentData = data.alignments.slice();
 
-  console.log(alignmentData);
-
-  // specify color scheme
   var colors = d3.scale.category20();
 
   // reset text in the textBox
   resetText();
 
-  console.log(alignmentData[0].sourceTitle);
-
-  // Set the first text's title as the typeahead value
-  $('.tt-input').typeahead('val', alignmentData[0].sourceTitle); 
-
+  // Set the selected text's title as the typeahead value
+  $("#scrollable-dropdown-menu").find(".tt-input")
+    .typeahead("val", alignmentData[0].sourceTitle); 
+ 
   // specify x axis range
   var x = d3.scale.linear()
     .domain(d3.extent(alignmentData, segmentFn))
@@ -225,7 +221,7 @@ var updatePassagePlot = function(data) {
   // draw y axis
   var yAxis = d3.svg.axis()
     .scale(y)
-    .orient("left")
+    .orient("left");
  
   // specify time axis range
   var time = d3.scale.linear()
@@ -490,10 +486,13 @@ var updateCorpusPlot = function(data, similarityKey) {
       .text("Similarity to earlier poems");
   };
 
-  // specify color scheme
-  var colors = d3.scale.category20();
+  // create lack and white color range with domain of similarity values
+  var colors = d3.scale.linear()
+    .domain([0,1])
+    .interpolate(d3.interpolateHcl)
+    .range([d3.rgb("#007AFF"), d3.rgb('#FFF500')]);
 
-    // draw x and y axes
+  // draw x and y axes
   d3.select("#corpusPlot").select(".y.axis")
     .transition()
     .duration(1000)
@@ -521,7 +520,7 @@ var updateCorpusPlot = function(data, similarityKey) {
     .duration(500)
     .attr("cx", function(d) { return x(d.year) + margin.left})
     .attr("cy", function(d) { return y(d[similarityKey]) + margin.top })
-    .attr("stroke", function(d) {return colors(d.year)});
+    .attr("stroke", function(d) {return colors(d[similarityKey])});
 
   // enter: append new data points (if any)
   circles.enter()
@@ -529,7 +528,7 @@ var updateCorpusPlot = function(data, similarityKey) {
     .attr("class", "scatterPoint")
     .attr("r", 4)
     .attr("style", "cursor: pointer;")
-    .attr("stroke", function(d) {return colors(d.year)})
+    .attr("stroke", function(d) {return colors(d[similarityKey])})
     .attr("title", function(d) {return d.title})
     // on click of elements, run search in passage plot 
     // and scroll to passage plot  
