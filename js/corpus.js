@@ -1,6 +1,6 @@
 // this script visualizes text reuse, using
 // json from an ANN algorithm contained in
-// /utils/. For more information, see:
+// ../utils/ . For more information, see:
 // https://github.com/duhaime/visualizing-text-reuse
 
 // TODO: factor out margin, w, h from passagePlot &
@@ -82,6 +82,9 @@ var resetText = function() {
 // use the waitUntilExists function to wait until .tt-input
 // exists, then populate the input with the provided text title
 var populateTypeahead = function(desiredValue) {
+  // if the typeahead is already present, call it
+  $(".tt-input").val(desiredValue);
+  // otherwise wait for the typeahead to become present before calling
   $(".tt-input").waitUntilExists( function() {
     $(".tt-input").val(desiredValue);
   });
