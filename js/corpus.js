@@ -21,7 +21,6 @@ var callPassagePlot = function (sourceId) {
   });
 };  
 
-
 // function that takes as input an array of dicts
 // [{"similarId":0,"title":"A"}...] and returns an 
 // array of dicts that contains only one 
@@ -48,7 +47,6 @@ var uniquify = function(arr) {
   return result;
 };
 
-
 // append selected source and target segments to the DOM
 var updateText = function(d) { 
   // append the text titles to the DOM
@@ -70,7 +68,6 @@ var updateText = function(d) {
   });
 };
 
-
 // function to reset text upon new json selection
 var resetText = function() { 
   var hintPreface = '<p style="font-weight:normal;">';
@@ -82,17 +79,22 @@ var resetText = function() {
   d3.select("#textRight").html("");
 }; 
 
- 
+// use the waitUntilExists function to wait until .tt-input
+// exists, then populate the input with the provided text title
+var populateTypeahead = function(desiredValue) {
+  $(".tt-input").waitUntilExists( function() {
+    $(".tt-input").val(desiredValue);
+  });
+};
+
 // plotting helper functions
 var similarityFn = function(d) { return d.similarity }
 var segmentFn = function(d) { return d.sourceSegment }
-
 
 // specify a key function
 var dataKey = function(d) {
   return d.sourceId + "." + d.similarId + "." + d.similarity;
 };
-
 
 // initialize plot by appending required assets to DOM
 var initializePassagePlot = function() {
@@ -166,8 +168,7 @@ var initializePassagePlot = function() {
 
   // create plot using source Id for 
   // the initial view
-  callPassagePlot(0);
-
+  callPassagePlot(977);
 };
 
 
@@ -191,13 +192,12 @@ var updatePassagePlot = function(data) {
 
   var colors = d3.scale.category20();
 
+  // set value of typeahead to selected text's title
+  populateTypeahead(alignmentData[0].sourceTitle);
+
   // reset text in the textBox
   resetText();
 
-  // Set the selected text's title as the typeahead value
-  $("#scrollable-dropdown-menu").find(".tt-input")
-    .typeahead("val", alignmentData[0].sourceTitle); 
- 
   // specify x axis range
   var x = d3.scale.linear()
     .domain(d3.extent(alignmentData, segmentFn))
@@ -558,4 +558,37 @@ initializeCorpusPlot();
 
 // initialize passage plot with the first record
 initializePassagePlot();
+
+
+// function to be called immediately on page load
+// that provides mechanism for detecting whether an element
+// is present on the page or not
+(function ($) {
+
+/**
+* @function
+* @property {object} jQuery plugin which runs handler function once specified element is inserted into the DOM
+* @param {function} handler A function to execute at the time when the element is inserted
+* @param {bool} shouldRunHandlerOnce Optional: if true, handler is unbound after its first invocation
+* @example $(selector).waitUntilExists(function);
+*/
+
+$.fn.waitUntilExists = function (handler, shouldRunHandlerOnce, isChild) {
+    var found = 'found';
+    var $this = $(this.selector);
+    var $elements = $this.not(function () { return $(this).data(found); }).each(handler).data(found, true);
+
+    if (!isChild)
+    {
+      (window.waitUntilExists_Intervals = window.waitUntilExists_Intervals || {})[this.selector] =
+        window.setInterval(function () { $this.waitUntilExists(handler, shouldRunHandlerOnce, true); }, 500)
+    ;
+    }
+    else if (shouldRunHandlerOnce && $elements.length)
+    {
+      window.clearInterval(window.waitUntilExists_Intervals[this.selector]);
+    }
+    return $this;
+}
+}(jQuery));
 
