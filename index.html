@@ -100,7 +100,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Overview</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h3 class="section-subheading text-muted">Welcome! The resources below visualize adaptations, imitations, and other forms of text reuse in early poetry.</h3>
                 </div>
             </div>
             <div class="row text-center">
@@ -111,24 +111,28 @@
                     <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i>
                   </span>
                 </a>
-                <h4 class="service-heading">Lorem</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                <h4 class="service-heading">Corpus View</h4>
+                <p class="text-muted">Analyze thousands of poems to find those that influenced later works or were influenced by earlier poems.</p>
                 </div>
                 <div class="col-md-4">
+                  <a class="page-scroll" href="#passage-plot">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-area-chart fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Lorem</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                  </a>
+                  <h4 class="service-heading">Passage View</h4>
+                  <p class="text-muted">Find passages from individual poems that influenced later poems or were influenced by earlier poems.</p>
                 </div>
                 <div class="col-md-4">
+                  <a class="page-scroll" href="#portfolio">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-code-fork fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Lorem</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                  </a>
+                  <h4 class="service-heading">About</h4>
+                  <p class="text-muted">Read about the algorithms behind the visualizations and find the source code to process other corpora.</p>
                 </div>
             </div>
         </div>
@@ -139,10 +143,9 @@
       <div class="container">
         <div id="buttonContainer" class="row text-center">
           <p><b style="margin-right:5px;">Plotting the most</b>
-            <button type="button" class="btn btn-default" id="influential" 
-                style="margin-right:5px;">Influential</button>
+            <button type="button" class="btn btn-default" id="influential" style="margin-right:5px;">Influential</button>
             <button type="button" class="btn btn-default" id="imitative">Imitative</button>
-            <b style="margin-left:5px;">poems in the corpus</b>
+            <b style="margin-left:5px">poems in the corpus</b>
           </p>
         </div>
       <div id="corpusPlotContainer" class="text-center">
@@ -158,7 +161,7 @@
             <input class="typeahead" type="text" placeholder="Texts in corpus">
           </div>
         </div>
-        <div id="passagePlot" style="text-align: center;"></div>
+        <div id="passagePlot"></div>
         <div id="textContainer">
           <div class="textBox">
             <h4 id="titleLeft"><p style="font-weight:normal;"></p></h4>
