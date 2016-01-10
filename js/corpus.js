@@ -1,6 +1,6 @@
 // this script visualizes text reuse, using
 // json from an ANN algorithm contained in
-// /utils/. For more information, see:
+// ../utils/ . For more information, see:
 // https://github.com/duhaime/visualizing-text-reuse
 
 // TODO: factor out margin, w, h from passagePlot &
@@ -14,12 +14,12 @@
 var callPassagePlot = function (sourceId) {
   var alignmentsDir = "json/alignments/"; 
   var alignmentsFile = sourceId + "_alignments.json";
-  var alignmentsPath = alignmentsDir + alignmentsFile;
+  var alignmentsPath = alignmentsDir + alignmentsFile
+
   $.getJSON( alignmentsPath, function( jsonResponse ) {
     updatePassagePlot( jsonResponse );
   });
 };  
-
 
 // function that takes as input an array of dicts
 // [{"similarId":0,"title":"A"}...] and returns an 
@@ -47,7 +47,6 @@ var uniquify = function(arr) {
   return result;
 };
 
-
 // append selected source and target segments to the DOM
 var updateText = function(d) { 
   // append the text titles to the DOM
@@ -69,7 +68,6 @@ var updateText = function(d) {
   });
 };
 
-
 // function to reset text upon new json selection
 var resetText = function() { 
   var hintPreface = '<p style="font-weight:normal;">';
@@ -81,57 +79,29 @@ var resetText = function() {
   d3.select("#textRight").html("");
 }; 
 
- 
+// use the waitUntilExists function to wait until .tt-input
+// exists, then populate the input with the provided text title
+var populateTypeahead = function(desiredValue) {
+  // if the typeahead is already present, call it
+  $(".tt-input").val(desiredValue);
+  // otherwise wait for the typeahead to become present before calling
+  $(".tt-input").waitUntilExists( function() {
+    $(".tt-input").val(desiredValue);
+  });
+};
+
 // plotting helper functions
 var similarityFn = function(d) { return d.similarity }
 var segmentFn = function(d) { return d.sourceSegment }
-
 
 // specify a key function
 var dataKey = function(d) {
   return d.sourceId + "." + d.similarId + "." + d.similarity;
 };
 
-
 // initialize plot by appending required assets to DOM
-var initializePassagePlot = function(sourceId) {
+var initializePassagePlot = function() {
 
-  // on initial passage plot call: 
-  // remove corpus plot div,
-  // restore padding on passage plot,
-  // remove any tooltips currently active,
-  // remove their tooltip arrows,
-  // and create the new required html
-  // for the passage plot
-  d3.select("#corpus-plot").select("#buttonContainer").remove();
-  d3.select("#corpus-plot").select("#corpusPlotContainer").remove();
-  d3.select("#corpus-plot")
-    .style("padding", "0px 0px");
-  d3.select("#passage-plot")
-    .style("padding","150px 0px");
-  d3.selectAll(".tooltip-inner").remove();
-  d3.selectAll(".tooltip-arrow").remove();
-
-  d3.select("#passage-plot").html(
-    '<div id="textSelectorContainer">' +
-      '<div id="scrollable-dropdown-menu" class="center">' +
-        '<input class="typeahead" type="text" placeholder="Texts in corpus">' +
-      '</div>' +
-    '</div>' +
-    '<div id="passagePlot" style="text-align: center;"></div>' +
-    '<div id="textContainer">' +
-      '<div class="textBox">' +
-        '<h4 id="titleLeft"><p style="font-weight:normal;"></p></h4>' +
-        '<p class="textBox" id="textLeft"></p>' +
-      '</div>' +
-      '<div class="textBox">' +
-        '<h4 id="titleRight"></h4>' +
-        '<p class="textBox" id="textRight"></p>' +
-      '</div>' +
-    '</div>' 
-  );
-
-  // after creating the passage plot html,
   // initialize the typeahead dropdown
   initializePassageTypeahead();
   addPassageTypeaheadListener();
@@ -201,17 +171,7 @@ var initializePassagePlot = function(sourceId) {
 
   // create plot using source Id for 
   // the initial view
-  callPassagePlot(sourceId);
-
-  // remove the active class from the "corpus view" nav link
-  var navbarSelector = $(".nav.navbar-nav.navbar-right");
-  navbarSelector.find(".active").removeClass("active");
-  var navbarLinks = navbarSelector.find("li");
-
-  // apply the active view to the "passage view" nav link
-  var passagePlotLink = navbarLinks[3];
-  $(passagePlotLink).addClass("active");
-
+  callPassagePlot(977);
 };
 
 
@@ -224,17 +184,19 @@ var updatePassagePlot = function(data) {
   var h = 340 - margin.top - margin.bottom;
 
   // identify divs we've already appended to DOM
-  var xAxisGroup = d3.select(".x.axis");
-  var yAxisGroup = d3.select(".y.axis");
-  var timeAxisGroup = d3.select(".time");
-  var svg = d3.select("#passage-plot").select("svg");
+  var xAxisGroup = d3.select("#passagePlot").select(".x.axis");
+  var yAxisGroup = d3.select("#passagePlot").select(".y.axis");
+  var timeAxisGroup = d3.select("#passagePlot").select(".time");
+  var svg = d3.select("#passagePlot").select("svg");
 
   // split data into two components
   bookendYearData = data.bookendYears.slice();
   alignmentData = data.alignments.slice();
 
-  // specify color scheme
   var colors = d3.scale.category20();
+
+  // set value of typeahead to selected text's title
+  populateTypeahead(alignmentData[0].sourceTitle);
 
   // reset text in the textBox
   resetText();
@@ -262,7 +224,7 @@ var updatePassagePlot = function(data) {
   // draw y axis
   var yAxis = d3.svg.axis()
     .scale(y)
-    .orient("left")
+    .orient("left");
  
   // specify time axis range
   var time = d3.scale.linear()
@@ -403,37 +365,12 @@ var updatePassagePlot = function(data) {
 
 var initializeCorpusPlot = function() {
 
-  // on plot initialization, remove passage view divs
-  // and reset the margin on passage view to 0 0 
-  d3.select("#textSelectorContainer").remove();
-  d3.select("#passagePlot").remove();
-  d3.select("#textContainer").remove();
-  d3.select("#passage-plot")
-    .style("padding", "0px 0px");
-  d3.select("#corpus-plot")
-    .style("padding","150px 0px");
- 
   // specify plot size and margins
   var margin = {top: 0, right: 70, left: 70, bottom: 50};   
   var w = 900 - margin.left - margin.right;
   var h = 500 - margin.top - margin.bottom;
 
-  // append the div to which we'll attach the plot
-  d3.select("#corpus-plot").html(
-    '<div id="buttonContainer" class="row text-center">' +
-      '<p><b style="margin-right:5px;">Plotting the most</b>' +
-        '<button type="button" class="btn btn-default"' + 
-            'id="influential" style="margin-right:5px;">Influential</button>' +
-        '<button type="button" class="btn btn-default"' +
-             'id="imitative">Imitative</button>' +
-      '<b style="margin-left:5px;">poems in the corpus</b>' +
-      '</p>' +
-    '</div>' +
-    '<div id="corpusPlotContainer" class="text-center">' +
-      '<div id="corpusPlot"></div>' +
-    '</div>'
-  );
-
+  // attach the plot to the corpusplot div
   var svg = d3.select("#corpusPlot").append("svg")
     .attr("width", w + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom);
@@ -459,6 +396,12 @@ var initializeCorpusPlot = function() {
       .style("font-weight", "normal")
       .text("Year");
 
+  // append x axis to DOM
+  var xAxisGroup = svg.append("g")
+    .attr("class","x axis")
+    .attr("transform", "translate(" + margin.left + 
+      "," + (h+margin.top) + ")");
+
   // add a label to the y axis
   svg.append("text")
     .attr("class", "y label")
@@ -470,6 +413,12 @@ var initializeCorpusPlot = function() {
     .style("font-weight", "normal")
     .attr("transform", "rotate(-90)")
     .text("Aggregate Similarity");
+
+  // append y axis to DOM
+  var yAxisGroup = svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(" + margin.left +
+       "," + margin.top + ")");
 
   // add jQuery listeners to buttons: on click 
   // call data transformation
@@ -513,6 +462,7 @@ var updateCorpusPlot = function(data, similarityKey) {
 
   // specify x axis range
   var x = d3.scale.linear()
+    .domain(d3.extent(data, function(d) {return d.year}))
     .range([15, w-15]);
 
   // draw x axis
@@ -520,14 +470,9 @@ var updateCorpusPlot = function(data, similarityKey) {
     .scale(x)
     .tickFormat(d3.format("d"));
 
-  // append x axis to DOM
-  var xAxisGroup = svg.append("g")
-    .attr("class","x axis")
-    .attr("transform", "translate(" + margin.left + 
-      "," + (h+margin.top) + ")");
-
   // specify y axis range
   var y = d3.scale.linear()
+    .domain(d3.extent(data, function(d) {return d[similarityKey]}))
     .range([h-15, 15]);
 
   // draw y axis
@@ -535,37 +480,28 @@ var updateCorpusPlot = function(data, similarityKey) {
     .scale(y)
     .orient("left");
          
-  // append y axis to DOM
-  var yAxisGroup = svg.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate(" + margin.left +
-       "," + margin.top + ")");
-
   // update y axis label according to plot type
   if (similarityKey == "similarityLater") {
-    d3.select(".y.label")
+    d3.select("#corpusPlot").select(".y.label")
       .text("Similarity to later poems");
   } else if (similarityKey == "similarityEarlier") {
-    d3.select(".y.label")
-      .transition()
-      .duration(500)
+    d3.select("#corpusPlot").select(".y.label")
       .text("Similarity to earlier poems");
   };
 
-  // specify color scheme
-  var colors = d3.scale.category20();
-
-  // set domains for x, y, and time
-  x.domain(d3.extent(data, function(d) {return d.year})); 
-  y.domain(d3.extent(data, function(d) {return d[similarityKey]}));
+  // create lack and white color range with domain of similarity values
+  var colors = d3.scale.linear()
+    .domain(d3.extent(data, function(d) {return d[similarityKey]}))
+    .interpolate(d3.interpolateHcl)  
+    .range([d3.rgb("#FFF500"), d3.rgb("#007AFF")]);
 
   // draw x and y axes
-  svg.select(".y.axis")
+  d3.select("#corpusPlot").select(".y.axis")
     .transition()
     .duration(1000)
     .call(yAxis);
 
-  svg.select(".x.axis")
+  d3.select("#corpusPlot").select(".x.axis")
     .call(xAxis);
 
   /////////////////////////
@@ -587,24 +523,32 @@ var updateCorpusPlot = function(data, similarityKey) {
     .duration(500)
     .attr("cx", function(d) { return x(d.year) + margin.left})
     .attr("cy", function(d) { return y(d[similarityKey]) + margin.top })
-    .attr("stroke", function(d) {return colors(d.year)});
+    .attr("stroke", function(d) {return colors(d[similarityKey])});
 
   // enter: append new data points (if any)
   circles.enter()
-    .append("circle")
-    .attr("class", "scatterPoint")
-    .attr("r", 4)
-    .attr("style", "cursor: pointer;")
-    .attr("stroke", function(d) {return colors(d.year)})
-    .attr("title", function(d) {return d.title})
-    // tear down the corpus plot and initialize passage plot
-    // plotting initially the clicked point's id
-    .on("click", function(d) {initializePassagePlot(66) })   
-     
-  .transition()
-    .duration(500)
-    .attr("cx", function(d) { return x(d.year) + margin.left })
-    .attr("cy", function(d) { return y(d[similarityKey]) + margin.top });
+    .append('g')
+    .each(function(d, i) {
+      var g = d3.select(this);
+      g.append("a")
+        .attr("xlink:href", "#passage-plot"); 
+
+      var circleLink = d3.select(this);
+      circleLink.append("circle")      
+        .attr("class", "scatterPoint")
+        .attr("r", 4)
+        .attr("style", "cursor: pointer;")
+        .attr("stroke", function(d) {return colors(d[similarityKey])})
+        .attr("title", function(d) {return d.title})
+        .on("click", function(d) {
+          // make call to update the plot
+          callPassagePlot(d.id);
+        })
+      .transition()
+        .duration(500)
+        .attr("cx", function(d) { return x(d.year) + margin.left })
+        .attr("cy", function(d) { return y(d[similarityKey]) + margin.top });
+     });
 
   circles.exit()
     .remove();
@@ -620,11 +564,11 @@ var updateCorpusPlot = function(data, similarityKey) {
 // data display
 initializeCorpusPlot();
 
-// add listeners to reset the plot div when user clicks button
-$("#corpus-plot-link").click(function() {
-  initializeCorpusPlot();
-});
+// initialize passage plot with the first record
+initializePassagePlot();
 
-$("#passage-plot-link").click(function() {
-  initializePassagePlot();
-});
+
+// function to be called immediately on page load
+// that provides mechanism for detecting whether an element
+// is present on the page or not
+
