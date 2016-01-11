@@ -100,49 +100,52 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Overview</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h3 class="section-subheading text-muted">Welcome! This site visualizes adaptations, imitations, and other forms of text reuse in early poetry.</h3>
                 </div>
             </div>
             <div class="row text-center">
               <div class="col-md-4">
-                <a class="page-scroll" href="#plot">      
+                <a class="page-scroll" href="#corpus-plot">      
                   <span class="fa-stack fa-4x">                  
                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
                     <i class="fa fa-bar-chart fa-stack-1x fa-inverse"></i>
                   </span>
                 </a>
-                <h4 class="service-heading">Lorem</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                <h4 class="service-heading">Corpus View</h4>
+                  <p class="text-muted">Analyze thousands of poems to find influential and imitative works.</p> 
                 </div>
                 <div class="col-md-4">
+                  <a class="page-scroll" href="#passage-plot">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-area-chart fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Lorem</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                  </a>
+                  <h4 class="service-heading">Passage View</h4>
+                    <p class="text-muted">Search inidividual poems for influential and imitative passages.</p> 
                 </div>
                 <div class="col-md-4">
+                  <a class="page-scroll" href="#portfolio">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-code-fork fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="service-heading">Lorem</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-                </div>
+                  </a>
+                  <h4 class="service-heading">About</h4>
+                    <p class="text-muted">Read about the algorithms used to generate the plots below.</p> 
+               </div>
             </div>
         </div>
     </section>
 
-    <!-- Corpus Plot Section -->
+    <!-- Corpus Plot Section -->  
     <section id="corpus-plot" class="bg-light-gray">
       <div class="container">
         <div id="buttonContainer" class="row text-center">
           <p><b style="margin-right:5px;">Plotting the most</b>
-            <button type="button" class="btn btn-default" id="influential" 
-                style="margin-right:5px;">Influential</button>
+            <button type="button" class="btn btn-default" id="influential" style="margin-right:5px;">Influential</button>
             <button type="button" class="btn btn-default" id="imitative">Imitative</button>
-            <b style="margin-left:5px;">poems in the corpus</b>
+            <b style="margin-left:5px">poems in the corpus</b>
           </p>
         </div>
       <div id="corpusPlotContainer" class="text-center">
@@ -153,21 +156,20 @@
     <!-- Passage Plot Section -->
     <section id="passage-plot" class="bg-light-gray">
       <div class="container">
-         <div id="textSelectorContainer">
-            <div id="scrollable-dropdown-menu" class="center">
-              <input class="typeahead" type="text" placeholder="Texts in corpus">
-            </div>
+        <div id="textSelectorContainer">
+          <div id="scrollable-dropdown-menu" class="center">
+            <input class="typeahead" type="text" placeholder="Texts in corpus">
           </div>
-          <div id="passagePlot" style="text-align: center;"></div>
-          <div id="textContainer">
-            <div class="textBox">
-              <h4 id="titleLeft"><p style="font-weight:normal;"></p></h4>
-              <p class="textBox" id="textLeft"></p>
-            </div>
-            <div class="textBox">
-              <h4 id="titleRight"></h4>
-              <p class="textBox" id="textRight"></p>
-            </div>
+        </div>
+        <div id="passagePlot"></div>
+        <div id="textContainer">
+          <div class="textBox">
+            <h4 id="titleLeft"><p style="font-weight:normal;"></p></h4>
+            <p class="textBox" id="textLeft"></p>
+          </div>
+          <div class="textBox">
+            <h4 id="titleRight"></h4>
+            <p class="textBox" id="textRight"></p>
           </div>
         </div>
       </div>
@@ -179,8 +181,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Portfolio</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h2 class="section-heading">About</h2>
+                    <h3 class="section-subheading text-muted">Click the images below to learn more about the algorithms used above.</h3>
                 </div>
             </div>
             <div class="row">
@@ -191,11 +193,11 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="img/portfolio/roundicons.png" class="img-responsive" alt="">
+                        <img src="img/portfolio/pile-of-books.jpg" class="img-responsive" alt="">
                     </a>
                     <div class="portfolio-caption">
-                        <h4>Round Icons</h4>
-                        <p class="text-muted">Graphic Design</p>
+                        <h4>Corpus View</h4>
+                        <p class="text-muted">Read about the algorithm used to generate the corpus view</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -205,11 +207,11 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="img/portfolio/startup-framework.png" class="img-responsive" alt="">
+                        <img src="img/portfolio/illuminated-manuscript.png" class="img-responsive" alt="">
                     </a>
                     <div class="portfolio-caption">
-                        <h4>Startup Framework</h4>
-                        <p class="text-muted">Website Design</p>
+                        <h4>Passage View</h4>
+                        <p class="text-muted">Read about the algorithms used to generate the passage view</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 portfolio-item">
@@ -219,11 +221,11 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="img/portfolio/treehouse.png" class="img-responsive" alt="">
+                        <img src="img/portfolio/source-code.png" class="img-responsive" alt="">
                     </a>
                     <div class="portfolio-caption">
-                        <h4>Treehouse</h4>
-                        <p class="text-muted">Website Design</p>
+                        <h4>Source Code</h4>
+                        <p class="text-muted">Find links to the source code and associated dependencies</p>
                     </div>
                 </div>
              </div>
@@ -427,7 +429,7 @@
     <script src="js/bootstrap.min.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/jquery.easing.min.js"></script>
     <script src="js/classie.js"></script>
     <script src="js/cbpAnimatedHeader.js"></script>
 
@@ -446,6 +448,7 @@
 
     <!-- Corpus and Passage Plot JavaScript -->
     <script src="js/corpus.js"></script>      
+
 
 </body>
 </html>
