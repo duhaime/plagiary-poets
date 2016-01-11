@@ -6,9 +6,22 @@
 // TODO: factor out margin, w, h from passagePlot &
 // corpus plot into functions
 
-///////////////////////////////////////
-// initialize passage plot functions //
-///////////////////////////////////////
+//////////////////////////////////
+// corpus plot helper functions //
+//////////////////////////////////
+
+// function that adds smooth scrolling to svg links
+var svgLinkScroll = function (){
+  $('html,body').animate({
+  scrollTop: $('#passage-plot').offset().top
+  }, 1500, 'easeInOutExpo');
+  return false;
+};
+
+
+///////////////////////////////////
+// passage plot helper functions //
+///////////////////////////////////
 
 // function that makes the plotting call
 var callPassagePlot = function (sourceId) {
@@ -99,6 +112,11 @@ var dataKey = function(d) {
   return d.sourceId + "." + d.similarId + "." + d.similarity;
 };
 
+
+/////////////////////////////
+// initialize passage plot //
+/////////////////////////////
+
 // initialize plot by appending required assets to DOM
 var initializePassagePlot = function() {
 
@@ -174,6 +192,10 @@ var initializePassagePlot = function() {
   callPassagePlot(977);
 };
 
+
+/////////////////////////
+// update passage plot //
+/////////////////////////
 
 // function to pass data into plot and update plot
 var updatePassagePlot = function(data) {
@@ -554,12 +576,3 @@ initializeCorpusPlot();
 
 // initialize passage plot with the first record
 initializePassagePlot();
-
-
-var svgLinkScroll = function (){
-  $('html,body').animate({
-  scrollTop: $('#passage-plot').offset().top
-  }, 1500, 'easeInOutExpo');
-  return false;
-};
-
