@@ -18,6 +18,12 @@ var svgLinkScroll = function (){
   return false;
 };
 
+// add listener that sets active class on button click
+// and removes active class from button siblings
+$("#buttonContainer").find(".btn").click(function(){
+  $(this).addClass("active").siblings().removeClass("active");
+});
+
 
 ///////////////////////////////////
 // passage plot helper functions //
