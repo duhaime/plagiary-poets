@@ -1,0 +1,12 @@
+{"infile_glob":"../data/clean_plaintext/*.txt",
+"metadata":"../data/metadata/clean_plaintext_metadata.txt",
+"persist_index":0,
+"load_index":0,
+"knn":5,
+"print_nn":0,
+"n_trees":1000,
+"search_k":10000,
+"maximum_processes":8,
+"minimum_similarity":0,
+"minimum_segments":5,
+"maximum_segments":10}
