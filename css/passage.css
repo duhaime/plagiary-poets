@@ -39,7 +39,7 @@ svg circle:active {
   width: 450px;
   height: 390px;
   float: left;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0px 20px 0px 20px;
 }
 
