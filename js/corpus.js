@@ -248,7 +248,7 @@ var updatePassagePlot = function(data) {
 
   // specify y axis range
   var y = d3.scale.linear()
-    .domain(d3.extent(alignmentData, similarityFn))
+    .domain([0,1])
     .range([h-15, 15]);
 
   // draw y axis
