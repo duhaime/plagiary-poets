@@ -4,9 +4,9 @@
 "load_index":1,
 "knn":5,
 "print_nn":0,
-"n_trees":10000,
-"search_k":1000000,
+"n_trees":12000,
+"search_k":10000000,
 "maximum_processes":8,
 "minimum_similarity":0,
-"minimum_segments":5,
-"maximum_segments":10}
+"minimum_segments":3,
+"maximum_segments":40}
