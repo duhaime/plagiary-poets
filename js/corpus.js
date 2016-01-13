@@ -18,6 +18,12 @@ var svgLinkScroll = function (){
   return false;
 };
 
+// add listener that sets active class on button click
+// and removes active class from button siblings
+$("#buttonContainer").find(".btn").click(function(){
+  $(this).addClass("active").siblings().removeClass("active");
+});
+
 
 ///////////////////////////////////
 // passage plot helper functions //
@@ -63,29 +69,31 @@ var uniquify = function(arr) {
 // append selected source and target segments to the DOM
 var updateText = function(d) { 
   // append the text titles to the DOM
-  d3.select("#titleLeft").html( d.sourceTitle);
-  d3.select("#titleRight").html( d.similarTitle);
+  d3.select("#titleLeft").html(d.sourceTitle);
+  d3.select("#titleRight").html(d.similarTitle);
+
   segmentsDir = "json/segments/";
   sourceSegmentsFile = "segments_" + d.sourceId + ".json";
-  sourceSegmentsPath = segmentsDir + sourceSegmentsFile;
+  sourceSegmentsPath = segmentsDir + sourceSegmentsFile;  
 
-  $.getJSON(sourceSegmentsPath, function( jsonResponse ) {
-    d3.select("#textLeft").html( jsonResponse[d.sourceSegment] );
+  d3.json(sourceSegmentsPath, function(error, json) {
+    if (error) return console.warn(error);
+    var leftContent = json[d["sourceSegment"]];
+    d3.select("#textLeft").html(leftContent);    
   });
 
-  similarSegmentsFile = "segments_" + d.similarId + ".json";
+  similarSegmentsFile = "segments_" + d.similarId + ".json"; 
   similarSegmentsPath = segmentsDir + similarSegmentsFile;
-
-  $.getJSON(similarSegmentsPath, function( jsonResponse ) {
-    d3.select("#textRight").html( jsonResponse[d.similarSegment] );
+ 
+  d3.json(similarSegmentsPath, function(error, json) {
+    if (error) return console.warn(error);
+    var rightContent = json[d["similarSegment"]];
+    d3.select("#textRight").html(rightContent);    
   });
 };
 
 // function to reset text upon new json selection
 var resetText = function() { 
-  var hintPreface = '<p style="font-weight:normal;">';
-  var hintText = ''; 
-  var hint = hintPreface + hintText + '</p4>'; 
   d3.select("#titleLeft").html("");
   d3.select("#titleRight").html("");
   d3.select("#textLeft").html("");
