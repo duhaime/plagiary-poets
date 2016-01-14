@@ -285,8 +285,13 @@
                             <h2>Corpus View Details</h2>
                             <p class="item-intro text-muted">Read below to learn about the methods used to generate the corpus view.</p>
                             <img class="img-responsive img-centered" src="img/portfolio/books-full.png" alt="">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                            <p>The corpus view visualizes the degree to which each poem within the corpus imitates earlier poems and influences later poems. To perform these measurements, the corpus is processed in the following way:<br><br>
+
+Each poem is split into a list of stanzas. For each stanza, the number of times each possible three character sequence {'aaa', 'aab', ... 'zzz'} occurs is counted. These counts are then used to perform an <a href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">Approximate Nearest Neighbors</a> search that determines the passages that are most similar to a given passage. Each passage is then compared to its nearest neighbors using Python's <a href="https://docs.python.org/2/library/difflib.html#sequencematcher-objects">Difflib.Sequencematcher()</a> function, and these scores are used to represent passage-level similarities. Given these similarity scores, each poem's similarity to earlier and later works is then calculated as follows:<br><br>
+
+For each segment of a given poem, the nearest neighbors are divided into those that were published before the given work and those that were published after the given work. The similarity scores of the nearest neighbors published before and after the given work are then summed (respectively). These summed values are then divided by the number of segments in the text, and this quotient is divided in turn by the number of nearest neighbors considered for each passage. The resultng values are then used to represent the degree to which the given work resembles earlier and later works.
+                              </p>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
                 </div>
@@ -371,7 +376,6 @@
 
     <!-- Corpus and Passage Plot JavaScript -->
     <script src="js/corpus.js"></script>      
-
 
 </body>
 </html>
