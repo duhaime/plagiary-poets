@@ -55,11 +55,9 @@ var addPassageTypeaheadListener = function () {
   $('#scrollable-dropdown-menu').on(
     {
        'typeahead:selected': function(e, datum) {
-       console.log(datum.id); 
        callPassagePlot(datum.id); 
      },
        'typeahead:autocompleted': function(e, datum) {
-       console.log(datum.id);
        callPassagePlot(datum.id);  
      }
   });

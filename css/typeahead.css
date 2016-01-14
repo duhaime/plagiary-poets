@@ -4,6 +4,14 @@
   width: 790px;
 } 
 
+#search-glass {
+  position: absolute; 
+  z-index: 200; 
+  bottom:10px; 
+  margin:0 0 0 10px; 
+  color:#9c9c9c;
+}
+
 .typeahead, .tt-query, .tt-hint {
   border: 2px solid #CCCCCC;
   border-radius: 8px 8px 8px 8px;
@@ -11,7 +19,7 @@
   height: 33px !important;
   line-height: 26px !important;
   outline: none;
-  padding: 8px 12px;
+  padding: 0px 26px;
   width: 775px;
 }
 
