@@ -1,6 +1,13 @@
 from collections import defaultdict
 import json, random, glob, operator, os
 
+"""This script is meant to be run once after one has run detect_reuse.py
+in order to remove redundant information (i.e. minimal similarity 
+observations in influence.json, which are so abundant as to overlap) 
+and less useful information (i.e. minimal similarity observations in 
+../json/alignments/*.json. The script assumes you've created a copy of
+the ../json directory in location ../../expensive-json""" 
+
 def reduce_corpus_plot_density():
   """Remove a selection of circles from the corpus plot in order to reduce DOM 
   strain on update of visualization. 
