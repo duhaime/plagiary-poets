@@ -1,28 +1,30 @@
 from collections import defaultdict
 import json, random, glob, operator, os
 
-"""This script is meant to be run once after one has run detect_reuse.py
-in order to remove redundant information (i.e. minimal similarity 
-observations in influence.json, which are so abundant as to overlap) 
-and less useful information (i.e. minimal similarity observations in 
-../json/alignments/*.json. The script assumes you've created a copy of
-the ../json directory in location ../../expensive-json""" 
+"""This script is meant to be run once after one has 
+run detect_reuse.py in order to remove redundant 
+information (i.e. minimal similarity observations 
+in influence.json, which are so abundant as to overlap) and 
+less useful information (i.e. minimal similarity observations 
+in ../json/alignments/*.json. The script assumes you've created 
+a copy of the ../json directory in location ../../updated-json""" 
 
 def reduce_corpus_plot_density():
-  """Remove a selection of circles from the corpus plot in order to reduce DOM 
-  strain on update of visualization. 
-  min_sim: observations with similarityLater and similarityEarlier scores
-    below this value will be candidates for removal
-  survival_probability: describes the probability that each of the candidates
-    for removal will be removed from the plot
-  cutoff_year: only candidates for removal published after this year will
-    remain candidates for removal"""
+  """Remove a selection of circles from the corpus plot in order 
+  to reduce DOM strain on update of visualization. 
+  min_sim: observations with similarityLater and 
+    similarityEarlier scores below this value will 
+    be candidates for removal
+  survival_probability: describes the probability that each of 
+    the candidates for removal will be removed from the plot
+  cutoff_year: only candidates for removal published after this 
+    year will remain candidates for removal"""
 
   min_sim = .1
   survival_probability = .35
   cutoff_year = 1740
 
-  with open("../../expensive-json/influence.json") as f:
+  with open("../../updated-json/influence.json") as f:
     f = json.load(f)
     refined_influence_json = []
     for i in f:
@@ -55,7 +57,7 @@ def reduce_passage_plot_observations():
 
   n_most_similar_texts = 8
 
-  for i in glob.glob("../../expensive-json/alignments/*.json"):
+  for i in glob.glob("../../updated-json/alignments/*.json"):
     with open(i) as f:
       f = json.load(f)
 
@@ -71,9 +73,10 @@ def reduce_passage_plot_observations():
         similarity_dict[similarId] += similarity
   
       # find the n texts with highest aggregate similarity      
-      most_similar_text_ids = [k[0] for k in sorted(similarity_dict.iteritems(), 
-            key=operator.itemgetter(1), 
-            reverse = True)[:n_most_similar_texts]]
+      most_similar_text_ids = [k[0] for k in 
+          sorted(similarity_dict.iteritems(), 
+          key=operator.itemgetter(1), 
+          reverse = True)[:n_most_similar_texts]]
 
       # given those ids, iterate over the observations again and retain
       # only those whose similarId is in the most similar text ids
