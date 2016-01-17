@@ -161,18 +161,26 @@
     <section id="passage-plot" class="bg-light-gray">
       <div class="container">
         <div id="textSelectorContainer">
-          <div id="scrollable-dropdown-menu" class="center" style="position: relative;">
+          <div id="scrollable-dropdown-menu" class="text-center">
             <span class="fa fa-search" id="search-glass"></span>
-            <input class="typeahead" type="text" placeholder="Texts in corpus">
+            <input class="typeahead" type="text" 
+                placeholder="Search for a poem">
           </div>
         </div>
-        <div id="passagePlot" class="text-center"></div>
-        <div id="textContainer">
-          <div class="textBox" id="textBoxLeft">
+        <div class="col-xs-12" id="passageTimeLine"></div>
+        <div class="container-fluid" id="passagePlotLegendContainer">
+          <div class="row">
+            <div id="passageLegend" class="col-sm-4 col-sm-push-8"></div> 
+            <div id="passagePlot" class="col-sm-8 col-sm-pull-4"></div>
+         </div>
+        </div>
+        
+        <div id="textContainer" class="col-xs-12">
+         <div class="textBox col-xs-6" id="textBoxLeft">
             <h4 id="titleLeft"></h4>
             <div class="textBox" id="textLeft"></div>
           </div>
-          <div class="textBox" id="textBoxRight">
+          <div class="textBox col-xs-6" id="textBoxRight">
             <h4 id="titleRight"></h4>
             <div class="textBox" id="textRight"></div>
           </div>
@@ -181,7 +189,7 @@
     </section>
  
     
-    <!-- Portfolio Grid Section -->
+    <!-- About Section -->
     <section id="portfolio">
         <div class="container">
             <div class="row">
