@@ -18,11 +18,52 @@ var svgLinkScroll = function (){
   return false;
 };
 
+
 // add listener that sets active class on button click
 // and removes active class from button siblings
 $("#buttonContainer").find(".btn").click(function(){
   $(this).addClass("active").siblings().removeClass("active");
 });
+
+
+// add listener to redraw corpus plot on screen resize
+d3.select(window).on('resize', function() {
+  // determine whether similarityLater or similarityEarlier is selected
+  var selectedButtonId = $("#buttonContainer").find(".active")[0].id;
+  if (selectedButtonId == "influential") {
+    var similaritySelected = "similarityLater";
+  } else {
+    var similaritySelected = "similarityEarlier";
+  };
+
+  d3.json("json/influence.json", function(error, json) {
+    if (error) return console.warn(error);
+    updateCorpusPlot(json, similaritySelected);
+  });
+});
+
+
+// return the viewport size and device class 
+// so that the corpus plot can be properly sized
+var findCorpusSize = function (){
+  // retrieve size of corpusPlot width in pixels
+  var width = $("#corpusPlot").width();
+  
+  // use conditional formatting in case of mobile or web
+  if (width < 480) {
+    var device = "mobile";
+    var margin = {top: 0, right: 0, left: 40, bottom: 50};
+    w = width - margin.left - margin.right;
+    h = width*.7 - margin.top - margin.bottom;   
+  } else {
+    var device = "web";
+    var margin = {top: 0, right: 0, left: 40, bottom: 50};
+    var w = width*.7 - margin.left - margin.right;
+    var h = width*.45 - margin.top - margin.bottom; 
+  };
+
+  return [device, margin, w, h];
+};
 
 
 ///////////////////////////////////
@@ -393,12 +434,23 @@ var updatePassagePlot = function(data) {
 // initialize corpus plot //
 ////////////////////////////
 
-var initializeCorpusPlot = function() {
+// read in a selected button ("#influential" or "#imitative")
+// and initialize the corpus plot for that view
+var initializeCorpusPlot = function(selectedButton) {
 
   // specify plot size and margins
-  var margin = {top: 0, right: 70, left: 70, bottom: 50};   
-  var w = 900 - margin.left - margin.right;
-  var h = 500 - margin.top - margin.bottom;
+  var corpusSizeVals = findCorpusSize();
+  var device = corpusSizeVals[0];
+  var margin = corpusSizeVals[1];
+  var w = Math.round(corpusSizeVals[2]);
+  var h = Math.round(corpusSizeVals[3]);
+
+  // use device to set axis label font size
+  if (device == "mobile") {
+    var fontSize = 10;
+  } else {
+    var fontSize = 12.5;
+  };
 
   // attach the plot to the corpusplot div
   var svg = d3.select("#corpusPlot").append("svg")
@@ -422,7 +474,7 @@ var initializeCorpusPlot = function() {
       .attr("text-anchor", "end")
       .attr("x", (w+margin.left+margin.right)/2 + 10)
       .attr("y", h + margin.top + margin.bottom - 3)
-      .style("font-size", "12.5")
+      .style("font-size", '"' + fontSize + '"')
       .style("font-weight", "normal")
       .text("Year");
 
@@ -439,7 +491,7 @@ var initializeCorpusPlot = function() {
     .attr("y", 3)
     .attr("x", -((h+margin.top+margin.bottom)/2) +75)
     .attr("dy", ".75em")
-    .style("font-size", "12.5")
+    .style("font-size", '"' + fontSize + '"')
     .style("font-weight", "normal")
     .attr("transform", "rotate(-90)")
     .text("Aggregate Similarity");
@@ -467,9 +519,8 @@ var initializeCorpusPlot = function() {
     });
   });
 
-  // use jQuery to click the selectAll button
-  // in order to initlize the plot
-  $("#influential").trigger("click");
+  // click the influential button to start corpus plot on "influential"
+  $(selectedButton).trigger("click");
 
 };
 
@@ -480,11 +531,60 @@ var initializeCorpusPlot = function() {
 var updateCorpusPlot = function(data, similarityKey) {
 
   // specify plot size and margins
-  var margin = {top: 0, right: 70, left: 70, bottom: 50};   
-  var w = 900 - margin.left - margin.right;
-  var h = 500 - margin.top - margin.bottom;
+  var corpusSizeVals = findCorpusSize();
+  var device = corpusSizeVals[0];
+  var margin = corpusSizeVals[1];
+  var w = Math.round(corpusSizeVals[2]);
+  var h = Math.round(corpusSizeVals[3]);
 
-  var svg = d3.select("#corpusPlot").select("svg");
+  // use the device to determine the number of ticks
+  // and the size of circles
+  if (device == "mobile") {
+    var xTickNum = 7;
+    var yTickNum = 5;
+    var circleSize = 3;
+    var fontSize = 10;
+  } else {
+    var xTickNum = 12;
+    var yTickNum = 12;
+    var circleSize = 4;
+    var fontSize = 12.5;
+  } 
+
+  /////////////////
+  // resize plot //
+  /////////////////
+
+  // update the svg size with current viewbox w and h 
+  var svg = d3.select("#corpusPlot").select("svg")
+    .attr("width", w + margin.left + margin.right)
+    .attr("height", h + margin.top + margin.bottom);
+
+  // update the rectangle size with current viewbox w and h
+  d3.select("#corpusPlot").select("rect")
+    .attr("width", w)
+    .attr("height", h);
+
+  // update x and y axis labels
+  d3.select(".x.label")
+    .attr("x", (w+margin.left+margin.right)/2 + 10)
+    .attr("y", h + margin.top + margin.bottom - 3);
+
+  d3.select(".y.label")
+    .attr("x", -((h+margin.top+margin.bottom)/2) +75)
+
+  // update x and y axes
+  d3.select(".y.axis")
+    .attr("transform", "translate(" + margin.left +
+       "," + margin.top + ")");
+
+  d3.select(".x.axis")
+    .attr("transform", "translate(" + margin.left + 
+      "," + (h+margin.top) + ")");
+
+  ///////////////////////
+  // draw new elements //
+  ///////////////////////
 
   // specify x axis range
   var x = d3.scale.linear()
@@ -494,6 +594,7 @@ var updateCorpusPlot = function(data, similarityKey) {
   // draw x axis
   var xAxis = d3.svg.axis()
     .scale(x)
+    .ticks(xTickNum)
     .tickFormat(d3.format("d"));
 
   // specify y axis range
@@ -504,6 +605,7 @@ var updateCorpusPlot = function(data, similarityKey) {
   // draw y axis
   var yAxis = d3.svg.axis()
     .scale(y)
+    .ticks(yTickNum)
     .orient("left");
          
   // update y axis label according to plot type
@@ -530,6 +632,11 @@ var updateCorpusPlot = function(data, similarityKey) {
   d3.select("#corpusPlot").select(".x.axis")
     .call(xAxis);
 
+  // set the font size of the x and y axis numerical labels
+  d3.select("#corpusPlot").selectAll(".axis").selectAll(".tick")
+    .style("font-size", fontSize);
+
+
   /////////////////////////
   // scatterplot circles //
   /////////////////////////
@@ -554,7 +661,7 @@ var updateCorpusPlot = function(data, similarityKey) {
   // enter: append new data points (if any)
   var circlesEnter = circles.enter().append("circle")      
     .attr("class", "scatterPoint")
-    .attr("r", 4)
+    .attr("r", circleSize)
     .attr("style", "cursor: pointer;")
     .attr("stroke", function(d) {return colors(d[similarityKey])})
     .attr("title", function(d) {return d.title})
@@ -578,9 +685,8 @@ var updateCorpusPlot = function(data, similarityKey) {
   });
 };
 
-// initialize the plot, which will in turn set the inital
-// data display
-initializeCorpusPlot();
+// initialize the corpus plot with a synthetic click on "#influential" button
+initializeCorpusPlot("#influential");
 
 // initialize passage plot with the first record
 initializePassagePlot();
