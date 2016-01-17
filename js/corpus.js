@@ -371,9 +371,9 @@ var updatePassagePlot = function(data) {
         "," + (timeMargin.top) + ")");
 
 
-  ///////////////////////
-  // draw new elements //
-  ///////////////////////
+  ///////////////////
+  // draw elements //
+  ///////////////////
 
   var colors = d3.scale.category20();
 
@@ -428,9 +428,17 @@ var updatePassagePlot = function(data) {
     // format years to remove comma from label
     .tickFormat(d3.format("d"));
 
-  // update x and y axes and build time axis
-  xAxisGroup.call(xAxis); 
-  yAxisGroup.call(yAxis);  
+  // update x and y axes
+  d3.select("#passagePlot").select(".y.axis")
+    .transition()
+    .duration(1000)
+    .call(yAxis);
+
+  d3.select("#passagePlot").select(".x.axis")
+    .transition()
+    .duration(1000)
+    .call(xAxis);
+
 
   //////////////////////////
   // scatterpoint circles //
@@ -443,6 +451,7 @@ var updatePassagePlot = function(data) {
 
   // update: update old data points (if any)
   circles.transition()
+    .duration(500)
     .attr("similarId", function(d) { return d.similarId})
     .attr("similarSegment", function(d) { return d.similarSegment })
     .attr("similarity", function(d) { return d.similarity})
@@ -466,7 +475,7 @@ var updatePassagePlot = function(data) {
   .transition()
     .duration(500)
     .attr("cx", function(d) { return x(segmentFn(d)) + plotMargin.left })
-    .attr("cy", function(d) { return y(similarityFn(d)) + plotMargin.top })
+    .attr("cy", function(d) { return y(similarityFn(d)) + plotMargin.top });
  
   // exit: remove unnecessary data points (if any)
   circles.exit()
