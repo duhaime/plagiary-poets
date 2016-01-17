@@ -270,6 +270,7 @@ def collect_similarity_json_slave(nn_key):
     source_path = id_to_infile[source_id]
     source_root = os.path.basename(source_path)
     source_title = metadata[source_root]["title"]
+    source_author = metadata[source_root]["author"]
     source_year = metadata[source_root]["year"]
 
     # Analyze the source file's nearest neighbors
@@ -280,13 +281,22 @@ def collect_similarity_json_slave(nn_key):
         if source_id == target_id:
             continue
 
+        # also skip the case where the source author
+        # == the target author, unless the authors
+        # of both are anonymous
+        target_path = id_to_infile[target_id]
+        target_root = os.path.basename(target_path)
+        target_author = metadata[target_root]["author"]
+
+        if source_author != "Anonymous":
+            if source_author == target_author:
+                continue 
+
         # Retrieve the decimal portion of number
         source_segment = int( str(labels[nn_key]).split(".")[1] )
         target_segment = int( str(labels[n]).split(".")[1] )
 
         # Retrieve the path and title for the target file
-        target_path = id_to_infile[target_id]
-        target_root = os.path.basename(target_path)
         target_title = metadata[target_root]["title"]
         target_year = metadata[target_root]["year"]
 
