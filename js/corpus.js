@@ -3,8 +3,6 @@
 // ../utils/ . For more information, see:
 // https://github.com/duhaime/visualizing-text-reuse
 
-// TODO: factor out margin, w, h from passagePlot &
-// corpus plot into functions
 
 //////////////////////////////////
 // corpus plot helper functions //
@@ -26,38 +24,21 @@ $("#buttonContainer").find(".btn").click(function(){
 });
 
 
-// add listener to redraw corpus plot on screen resize
-d3.select(window).on('resize', function() {
-  // determine whether similarityLater or similarityEarlier is selected
-  var selectedButtonId = $("#buttonContainer").find(".active")[0].id;
-  if (selectedButtonId == "influential") {
-    var similaritySelected = "similarityLater";
-  } else {
-    var similaritySelected = "similarityEarlier";
-  };
-
-  d3.json("json/influence.json", function(error, json) {
-    if (error) return console.warn(error);
-    updateCorpusPlot(json, similaritySelected);
-  });
-});
-
-
 // return the viewport size and device class 
 // so that the corpus plot can be properly sized
-var findCorpusSize = function (){
-  // retrieve size of corpusPlot width in pixels
-  var width = $("#corpusPlot").width();
-  
+var findCorpusPlotSize = function (){
+  // retrieve size of device width in pixels
+  var width = window.innerWidth;
+
   // use conditional formatting in case of mobile or web
   if (width < 480) {
     var device = "mobile";
-    var margin = {top: 0, right: 0, left: 40, bottom: 50};
+    var margin = {top: 0, right: 30, left: 40, bottom: 50};
     w = width - margin.left - margin.right;
     h = width*.7 - margin.top - margin.bottom;   
   } else {
     var device = "web";
-    var margin = {top: 0, right: 0, left: 40, bottom: 50};
+    var margin = {top: 0, right: 30, left: 40, bottom: 50};
     var w = width*.7 - margin.left - margin.right;
     var h = width*.45 - margin.top - margin.bottom; 
   };
@@ -80,6 +61,7 @@ var callPassagePlot = function (sourceId) {
     updatePassagePlot( jsonResponse );
   });
 };  
+
 
 // function that takes as input an array of dicts
 // [{"similarId":0,"title":"A"}...] and returns an 
@@ -107,6 +89,7 @@ var uniquify = function(arr) {
   return result;
 };
 
+
 // append selected source and target segments to the DOM
 var updateText = function(d) { 
   // append the text titles to the DOM
@@ -133,6 +116,7 @@ var updateText = function(d) {
   });
 };
 
+
 // function to reset text upon new json selection
 var resetText = function() { 
   d3.select("#titleLeft").html("");
@@ -140,6 +124,7 @@ var resetText = function() {
   d3.select("#textLeft").html("");
   d3.select("#textRight").html("");
 }; 
+
 
 // use the waitUntilExists function to wait until .tt-input
 // exists, then populate the input with the provided text title
@@ -152,14 +137,81 @@ var populateTypeahead = function(desiredValue) {
   });
 };
 
+
 // plotting helper functions
 var similarityFn = function(d) { return d.similarity }
 var segmentFn = function(d) { return d.sourceSegment }
+
 
 // specify a key function
 var dataKey = function(d) {
   return d.sourceId + "." + d.similarId + "." + d.similarity;
 };
+
+
+// return the viewport size and device class 
+// so that the passage plot can be properly sized
+var findPassagePlotSize = function (){
+  // retrieve size of device width in pixels
+  var deviceWidth = window.innerWidth;
+
+  // use conditional formatting in case of mobile or web
+  if (deviceWidth < 480) {
+    var device = "mobile";
+  } else {
+    var device = "web";
+  } 
+
+  // set the time axis size as a function of its parent's size
+  var timelineDivWidth = $("#passageTimeLine").width();
+  var timeMargin = {top: 50, 
+      right: 0, left: 0, bottom: 0};
+  var timeWidth = timelineDivWidth - timeMargin.left - timeMargin.right;
+  var timeHeight = 100 - timeMargin.top - timeMargin.bottom;
+
+  // set the size of the passage plot and legend plots 
+  // as a function of their parents' size
+  var passagePlotDivWidth = $("#passagePlot").width();
+  var plotMargin = {top: 0, right: 0, left: .1*passagePlotDivWidth, 
+      bottom: .1*passagePlotDivWidth};   
+  var plotWidth = passagePlotDivWidth - plotMargin.left - plotMargin.right;
+  var plotHeight = .75*passagePlotDivWidth - plotMargin.top - plotMargin.bottom; 
+  var fontSize = "8px";
+
+  return [device, plotMargin, plotWidth, plotHeight, 
+      timeMargin, timeWidth, timeHeight, fontSize];
+};
+
+
+// add listener to redraw plots on screen resize
+d3.select(window).on('resize', function() {
+
+  // determine whether similarityLater or similarityEarlier 
+  // is selected in the corpus plot
+  var selectedButtonId = $("#buttonContainer").find(".active")[0].id;
+  if (selectedButtonId == "influential") {
+    var similaritySelected = "similarityLater";
+  } else {
+    var similaritySelected = "similarityEarlier";
+  };
+
+  // make call to update corpus plot, using json 
+  // for the currently selected button 
+  d3.json("json/influence.json", function(error, json) {
+    if (error) return console.warn(error);
+    updateCorpusPlot(json, similaritySelected);
+  });
+
+  // determine which text is currently selected in 
+  // the typeahead for the passage plot
+  var selectedId = $("#scrollable-dropdown-menu")
+    .data("selected-text-id");
+
+  // redraw the plot using the selected text id
+  callPassagePlot(selectedId);
+
+});
+
 
 
 /////////////////////////////
@@ -173,24 +225,29 @@ var initializePassagePlot = function() {
   initializePassageTypeahead();
   addPassageTypeaheadListener();
 
-  // width and height for the scatter plot and time axis
-  var margin = {top: 70, right: 420, left: 70, bottom: 50};   
-  var timeMargin = {top:40, right: 0, left: 5, bottom: 0};
-  var w = 800 - margin.left - margin.right;
-  var h = 340 - margin.top - margin.bottom;
+  var passageSizeVals = findPassagePlotSize();
+  var device = passageSizeVals[0];
+  var plotMargin = passageSizeVals[1];
+  var plotWidth = passageSizeVals[2];
+  var plotHeight = passageSizeVals[3];
+  var timeMargin = passageSizeVals[4];
+  var timeWidth = passageSizeVals[5];
+  var timeHeight = passageSizeVals[6];
+  var fontSize = passageSizeVals[7];
 
   // draw the svg
   var svg = d3.select("#passagePlot").append("svg:svg")
-    .attr("width", w + margin.left + margin.right)
-    .attr("height", h + margin.top + margin.bottom);
+    .attr("width", plotWidth + plotMargin.left + plotMargin.right)
+    .attr("height", plotHeight + plotMargin.top + plotMargin.bottom)
+    .attr("id", "passagePlotSvg");
 
   // select a subregion of the svg to create a dropbox
   var graphBox = svg.append("rect")
     .attr("id", "graphBox")
-    .attr("x", margin.left)
-    .attr("y", margin.top)
-    .attr("height", h)
-    .attr("width", w)
+    .attr("x", plotMargin.left)
+    .attr("y", plotMargin.top)
+    .attr("height", plotHeight)
+    .attr("width", plotWidth)
     .attr("stroke", "#c4c4c4")
     .attr("stroke-width", 1)
     .attr("fill", "#ffffff");
@@ -198,47 +255,55 @@ var initializePassagePlot = function() {
   // append x axis to DOM
   var xAxisGroup = svg.append("g")
     .attr("class","x axis")
-    .attr("transform", "translate(" + margin.left + 
-      "," + (h+margin.top) + ")");
+    .attr("transform", "translate(" + plotMargin.left + 
+      "," + (plotHeight + plotMargin.top) + ")");
 
   // add a label to the x axis
   xAxisLabel = svg.append("text")
     .attr("class", "x label")
     .attr("text-anchor", "end")
-    .attr("x", w-15)
-    .attr("y", h + margin.top + margin.bottom - 9)
-    .style("font-size", "12.5")
+    .attr("x", plotWidth-15)
+    .attr("y", plotHeight + plotMargin.top + plotMargin.bottom - 9)
+    .style("font-size", fontSize)
     .style("font-weight", "normal")
     .text("Passage in selected text");
         
   // append y axis to DOM
   var yAxisGroup = svg.append("g")
     .attr("class", "y axis")
-    .attr("transform", "translate(" + margin.left +
-       "," + margin.top + ")")
+    .attr("transform", "translate(" + plotMargin.left +
+       "," + plotMargin.top + ")")
 
   // add a label to the y axis
   svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
     .attr("y", 8)
-    .attr("x", -(h+margin.top-10)/2)
+    .attr("x", -(plotHeight + plotMargin.top-10)/2)
     .attr("dy", ".75em")
-    .style("font-size", "12.5")
+    .style("font-size", fontSize)
     .style("font-weight", "normal")
     .attr("transform", "rotate(-90)")
     .text("Passage similarity");
 
-  // append time axis to DOM
-  var timeAxisGroup = svg.append("g")
+  // append time axis SVG to DOM
+  var timelineSvg = d3.select("#passageTimeLine").append("svg:svg")
+    .attr("width", timeWidth + timeMargin.left + timeMargin.right)
+    .attr("height", timeHeight + timeMargin.top + timeMargin.bottom);
+
+  timelineSvg.append("g")
     .attr("class", "time")
     .attr("transform", "translate(" + 
         (timeMargin.left) + 
         "," + (timeMargin.top) + ")");
 
+  // append passage legend svg to DOM
+  d3.select("#passageLegend").append("svg:svg")
+   .attr("id", "passageLegendSvg");
+
   // create plot using source Id for 
   // the initial view
-  callPassagePlot(977);
+  callPassagePlot(0);
 };
 
 
@@ -249,33 +314,88 @@ var initializePassagePlot = function() {
 // function to pass data into plot and update plot
 var updatePassagePlot = function(data) {
 
-  var margin = {top: 70, right: 420, left: 70, bottom: 50};   
-  var timeMargin = {top:40, right: 0, left: 5, bottom: 0}; 
-  var w = 800 - margin.left - margin.right;
-  var h = 340 - margin.top - margin.bottom;
+  var passageSizeVals = findPassagePlotSize();
+  var device = passageSizeVals[0];
+  var plotMargin = passageSizeVals[1];
+  var plotWidth = passageSizeVals[2];
+  var plotHeight = passageSizeVals[3];
+  var timeMargin = passageSizeVals[4];
+  var timeWidth = passageSizeVals[5];
+  var timeHeight = passageSizeVals[6];
+  var fontSize = passageSizeVals[7];
 
   // identify divs we've already appended to DOM
   var xAxisGroup = d3.select("#passagePlot").select(".x.axis");
   var yAxisGroup = d3.select("#passagePlot").select(".y.axis");
-  var timeAxisGroup = d3.select("#passagePlot").select(".time");
-  var svg = d3.select("#passagePlot").select("svg");
+  var timeAxisGroup = d3.select("#passageTimeLine").select(".time");
+  var svg = d3.select("#passagePlot").select("#passagePlotSvg");
+
+  //////////////////
+  // update sizes //
+  //////////////////
+
+  svg.attr("width", plotWidth + plotMargin.left + plotMargin.right)
+    .attr("height", plotHeight + plotMargin.top + plotMargin.bottom);
+
+  d3.select("#passagePlot").select("#graphBox")
+    .attr("x", plotMargin.left)
+    .attr("y", plotMargin.top)
+    .attr("height", plotHeight)
+    .attr("width", plotWidth);
+
+  d3.select("#passagePlot").select(".x.axis")
+    .attr("transform", "translate(" + plotMargin.left + 
+      "," + (plotHeight + plotMargin.top) + ")");
+
+  d3.select("#passagePlot").select(".x.label")
+    .attr("x", plotWidth-15)
+    .attr("y", plotHeight + plotMargin.top + plotMargin.bottom - 9)
+    .style("font-size", fontSize);
+
+  d3.select("#passagePlot").select(".y.axis")
+    .attr("transform", "translate(" + plotMargin.left +
+       "," + plotMargin.top + ")");
+
+  d3.select("#passagePlot").select(".y.label")
+    .attr("y", 8)
+    .attr("x", -(plotHeight + plotMargin.top-10)/2)
+    .style("font-size", fontSize);
+
+  d3.select("#passageTimeLine").select("svg")
+    .attr("width", timeWidth + timeMargin.left + timeMargin.right)
+    .attr("height", timeHeight + timeMargin.top + timeMargin.bottom);
+
+  d3.select("#passageTimeLine").select(".time")
+    .attr("transform", "translate(" + 
+        (timeMargin.left) + 
+        "," + (timeMargin.top) + ")");
+
+
+  ///////////////////////
+  // draw new elements //
+  ///////////////////////
+
+  var colors = d3.scale.category20();
+
+  // reset text in the textBox
+  resetText();
 
   // split data into two components
   bookendYearData = data.bookendYears.slice();
   alignmentData = data.alignments.slice();
 
-  var colors = d3.scale.category20();
-
   // set value of typeahead to selected text's title
   populateTypeahead(alignmentData[0].sourceTitle);
 
-  // reset text in the textBox
-  resetText();
+  // persist the id of the selected text within the typeahead
+  // to maintain state of the chosen text
+  $("#scrollable-dropdown-menu")
+    .data("selected-text-id", alignmentData[0].sourceId);
 
   // specify x axis range
   var x = d3.scale.linear()
     .domain(d3.extent(alignmentData, segmentFn))
-    .range([15, w-15]);
+    .range([15, plotWidth-15]);
 
   // draw x axis
   var xAxis = d3.svg.axis()
@@ -290,7 +410,7 @@ var updatePassagePlot = function(data) {
   // specify y axis range
   var y = d3.scale.linear()
     .domain([0,1])
-    .range([h-15, 15]);
+    .range([plotHeight-15, 15]);
 
   // draw y axis
   var yAxis = d3.svg.axis()
@@ -299,7 +419,7 @@ var updatePassagePlot = function(data) {
  
   // specify time axis range
   var time = d3.scale.linear()
-    .range([15, w+margin.right+margin.left-35])
+    .range([timeMargin.left, timeWidth + timeMargin.left])
     .domain(d3.extent(bookendYearData));
 
   // draw time axis
@@ -326,8 +446,8 @@ var updatePassagePlot = function(data) {
     .attr("similarId", function(d) { return d.similarId})
     .attr("similarSegment", function(d) { return d.similarSegment })
     .attr("similarity", function(d) { return d.similarity})
-    .attr("cx", function(d) { return x(segmentFn(d)) + margin.left })
-    .attr("cy", function(d) { return y(similarityFn(d)) + margin.top })
+    .attr("cx", function(d) { return x(segmentFn(d)) + plotMargin.left })
+    .attr("cy", function(d) { return y(similarityFn(d)) + plotMargin.top })
     .attr("stroke", function(d) {return colors(d.similarId)});
 
   // enter: append new data points (if any)
@@ -345,8 +465,8 @@ var updatePassagePlot = function(data) {
     })   
   .transition()
     .duration(500)
-    .attr("cx", function(d) { return x(segmentFn(d)) + margin.left })
-    .attr("cy", function(d) { return y(similarityFn(d)) + margin.top })
+    .attr("cx", function(d) { return x(segmentFn(d)) + plotMargin.left })
+    .attr("cy", function(d) { return y(similarityFn(d)) + plotMargin.top })
  
   // exit: remove unnecessary data points (if any)
   circles.exit()
@@ -359,7 +479,7 @@ var updatePassagePlot = function(data) {
   // retrieve one observation of each similarId
   var uniqueIds = uniquify(alignmentData);
 
-  var legends = svg.selectAll(".legend")
+  var legends = d3.select("#passageLegend").select("svg").selectAll(".legend")
     .data(uniqueIds, dataKey); 
 
   // there's nothing to update
@@ -371,17 +491,18 @@ var updatePassagePlot = function(data) {
     .each(function(d, i) {
       var g = d3.select(this);
       g.append("svg:circle")
-        .attr("cx", w + margin.left + 24)
-        .attr("cy", 20*i+15 + margin.top)
+        .attr("cx", 5)
+        .attr("cy", 20*i+15)
         .attr("r", 4)
         .style("stroke", function(d){return colors(d.similarId)});
         
       g.append("text")
-        .attr("x", w + margin.left + 32)
-        .attr("y", 20*i + 20 + margin.top)
+        .attr("x", 12)
+        .attr("y", 20*i + 20)
         .attr("height",20)
         .attr("width",60)
         .style("fill", "#000000")
+        .style("font-size", fontSize)
         .text(function(d){return d.similarTitle});
     });
 
@@ -402,32 +523,30 @@ var updatePassagePlot = function(data) {
   timeAxisGroup.call(timeAxis);
 
   // append circles to time axis
-  var timePoints = svg.selectAll(".timePoint")
-    .data(uniqueIds, dataKey);
+  var timePoints = d3.select("#passageTimeLine").select(".time").selectAll(".timePoint")
+   .data(uniqueIds, dataKey);
 
   timePoints.transition()
     .attr("cx", function(d) { return time(d.similarYear) + timeMargin.left});
-    
+
   timePoints.enter()
     .append("circle")
     .attr("class","timePoint") 
     .attr('r', 4 )
     .attr('cx', function(d) { return time(d.similarYear) + timeMargin.left})
-    .attr('cy', function(d) { return timeMargin.top })
     .attr('stroke', function(d) { return colors(d.similarId) });
 
   timePoints.exit()
     .remove();
 
   // rotate the year labels on the time axis
-  d3.select(".time").selectAll("text")
+  d3.select("#passageTimeLine").select(".time").selectAll("text")
     .attr("x", 23)
     .attr("y", -10)
-    .style("font-size", "12.5")
+    .style("font-size", fontSize)
     .style("font-weight", "normal")
     .attr("transform", "rotate(-65)" );
 };
-
 
 
 ////////////////////////////
@@ -439,7 +558,7 @@ var updatePassagePlot = function(data) {
 var initializeCorpusPlot = function(selectedButton) {
 
   // specify plot size and margins
-  var corpusSizeVals = findCorpusSize();
+  var corpusSizeVals = findCorpusPlotSize();
   var device = corpusSizeVals[0];
   var margin = corpusSizeVals[1];
   var w = Math.round(corpusSizeVals[2]);
@@ -524,14 +643,14 @@ var initializeCorpusPlot = function(selectedButton) {
 
 };
 
-//////////////////////
-// make scatterplot //
-//////////////////////
+////////////////////////
+// update corpus plot //
+////////////////////////
 
 var updateCorpusPlot = function(data, similarityKey) {
 
   // specify plot size and margins
-  var corpusSizeVals = findCorpusSize();
+  var corpusSizeVals = findCorpusPlotSize();
   var device = corpusSizeVals[0];
   var margin = corpusSizeVals[1];
   var w = Math.round(corpusSizeVals[2]);
