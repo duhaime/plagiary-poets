@@ -1,16 +1,8 @@
 #scrollable-dropdown-menu .tt-menu {
   max-height: 150px;
   overflow-y: auto;
-  width: 790px;
+  width: 100%;
 } 
-
-#search-glass {
-  position: absolute; 
-  z-index: 200; 
-  bottom:10px; 
-  margin:0 0 0 10px; 
-  color:#9c9c9c;
-}
 
 .typeahead, .tt-query, .tt-hint {
   border: 2px solid #CCCCCC;
@@ -19,20 +11,18 @@
   height: 33px !important;
   line-height: 26px !important;
   outline: none;
-  padding: 0px 26px;
-  width: 775px;
+  padding: 0px 0px 0px 26px;
+  width: 100%;
 }
 
-.typeahead:focus {
-  border: 2px solid #FEC503;
-}
 .tt-query {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 
 /* styles from SO thread number 20198247 */
-.tt-menu { /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
-  width: 422px;
+.tt-menu { 
+  /* tt-menu used to be called tt-dropdown-menu */
+  width: 100%;
   margin-top: 10px;
   padding: 8px 0;
   background-color: #fff;
@@ -48,15 +38,40 @@
   line-height: 24px !important;
 }
 
-.tt-suggestion.tt-is-under-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
-  color: #fff;
-  background-color: #0097cf;
-}
-
 .tt-suggestion p {
   margin: 0;
 }
 
-#typeaheadContainer {
-  padding: 15px 0px 15px 0px;
+/* styles for the magnifying glass in the search box */
+#search-glass {
+  position: absolute; 
+  z-index: 200; 
+  bottom:10px; 
+  margin:0 0 0 10px; 
+  color:#9c9c9c;
+}
+
+/* make position of menu relative to position magnifying glass */
+#scrollable-dropdown-menu {
+  position: relative;
+}
+
+/* create a golden halo around typeahead box when selected */
+.typeahead:focus {
+  border: 2px solid #FEC503;
+}
+
+/* set the width of the typeahead box and its children */
+.twitter-typeahead {
+  width: 100%;
+}
+
+/* set the text align on the autocomplete options to left */
+.tt-menu {
+  text-align: left;
+}
+
+/* set a margin around the text selector typeahead */
+#textSelectorContainer {
+  padding: 10px 0px 10px 0px;
 }
