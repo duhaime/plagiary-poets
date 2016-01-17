@@ -33,12 +33,12 @@ var findCorpusPlotSize = function (){
   // use conditional formatting in case of mobile or web
   if (width < 480) {
     var device = "mobile";
-    var margin = {top: 0, right: 30, left: 40, bottom: 50};
+    var margin = {top: 0, right: 30, left: 60, bottom: 50};
     w = width - margin.left - margin.right;
     h = width*.7 - margin.top - margin.bottom;   
   } else {
     var device = "web";
-    var margin = {top: 0, right: 30, left: 40, bottom: 50};
+    var margin = {top: 0, right: 30, left: 60, bottom: 50};
     var w = width*.7 - margin.left - margin.right;
     var h = width*.45 - margin.top - margin.bottom; 
   };
@@ -616,7 +616,7 @@ var initializeCorpusPlot = function(selectedButton) {
   svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
-    .attr("y", 3)
+    .attr("y", margin.left-55)
     .attr("x", -((h+margin.top+margin.bottom)/2) +75)
     .attr("dy", ".75em")
     .style("font-size", '"' + fontSize + '"')
