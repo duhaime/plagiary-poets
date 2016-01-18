@@ -33,9 +33,10 @@ var findCorpusPlotSize = function (){
   // use conditional formatting in case of mobile or web
   if (width < 480) {
     var device = "mobile";
-    var margin = {top: 0, right: 30, left: 60, bottom: 50};
+    var margin = {top: 0, right: 30, 
+        left: 40, bottom: 40};
     w = width - margin.left - margin.right;
-    h = width*.7 - margin.top - margin.bottom;   
+    h = width*.65 - margin.top - margin.bottom;   
   } else {
     var device = "web";
     var margin = {top: 0, right: 30, left: 60, bottom: 50};
@@ -162,18 +163,22 @@ var findPassagePlotSize = function (){
     var device = "web";
   } 
 
+  ///////////////////
+  // mobile design //
+  ///////////////////
+
   // set the time axis size as a function of its parent's size
   var timelineDivWidth = $("#passageTimeLine").width();
   var timeMargin = {top: 50, 
-      right: 0, left: 0, bottom: 0};
+      right: 15, left: 2, bottom: 0};
   var timeWidth = timelineDivWidth - timeMargin.left - timeMargin.right;
-  var timeHeight = 100 - timeMargin.top - timeMargin.bottom;
+  var timeHeight = 60 - timeMargin.top - timeMargin.bottom;
 
   // set the size of the passage plot and legend plots 
   // as a function of their parents' size
   var passagePlotDivWidth = $("#passagePlot").width();
-  var plotMargin = {top: 0, right: 0, left: .1*passagePlotDivWidth, 
-      bottom: .1*passagePlotDivWidth};   
+  var plotMargin = {top: 10, right: 5, left: 35, 
+      bottom: 35};   
   var plotWidth = passagePlotDivWidth - plotMargin.left - plotMargin.right;
   var plotHeight = .75*passagePlotDivWidth - plotMargin.top - plotMargin.bottom; 
   var fontSize = "8px";
@@ -256,14 +261,15 @@ var initializePassagePlot = function() {
   var xAxisGroup = svg.append("g")
     .attr("class","x axis")
     .attr("transform", "translate(" + plotMargin.left + 
-      "," + (plotHeight + plotMargin.top) + ")");
+      "," + (plotHeight + plotMargin.top) + ")")
+    .style("font-size", fontSize);
 
   // add a label to the x axis
   xAxisLabel = svg.append("text")
     .attr("class", "x label")
     .attr("text-anchor", "end")
-    .attr("x", plotWidth-15)
-    .attr("y", plotHeight + plotMargin.top + plotMargin.bottom - 9)
+    .attr("x", plotWidth * .8 )
+    .attr("y", plotHeight + plotMargin.top + plotMargin.bottom -5)
     .style("font-size", fontSize)
     .style("font-weight", "normal")
     .text("Passage in selected text");
@@ -273,13 +279,14 @@ var initializePassagePlot = function() {
     .attr("class", "y axis")
     .attr("transform", "translate(" + plotMargin.left +
        "," + plotMargin.top + ")")
+    .style("font-size", fontSize);
 
   // add a label to the y axis
   svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
-    .attr("y", 8)
-    .attr("x", -(plotHeight + plotMargin.top-10)/2)
+    .attr("y", 1)
+    .attr("x", -(plotHeight + plotMargin.top) * .35) 
     .attr("dy", ".75em")
     .style("font-size", fontSize)
     .style("font-weight", "normal")
@@ -345,20 +352,22 @@ var updatePassagePlot = function(data) {
 
   d3.select("#passagePlot").select(".x.axis")
     .attr("transform", "translate(" + plotMargin.left + 
-      "," + (plotHeight + plotMargin.top) + ")");
+      "," + (plotHeight + plotMargin.top) + ")")
+    .style("font-size", fontSize);
 
   d3.select("#passagePlot").select(".x.label")
-    .attr("x", plotWidth-15)
-    .attr("y", plotHeight + plotMargin.top + plotMargin.bottom - 9)
+    .attr("x", plotWidth * .8 )
+    .attr("y", plotHeight + plotMargin.top + plotMargin.bottom -5)
     .style("font-size", fontSize);
 
   d3.select("#passagePlot").select(".y.axis")
     .attr("transform", "translate(" + plotMargin.left +
-       "," + plotMargin.top + ")");
+       "," + plotMargin.top + ")")
+    .style("font-size", fontSize);
 
   d3.select("#passagePlot").select(".y.label")
-    .attr("y", 8)
-    .attr("x", -(plotHeight + plotMargin.top-10)/2)
+    .attr("y", 1)
+    .attr("x", -(plotHeight + plotMargin.top) * .35)
     .style("font-size", fontSize);
 
   d3.select("#passageTimeLine").select("svg")
@@ -570,8 +579,8 @@ var initializeCorpusPlot = function(selectedButton) {
   var corpusSizeVals = findCorpusPlotSize();
   var device = corpusSizeVals[0];
   var margin = corpusSizeVals[1];
-  var w = Math.round(corpusSizeVals[2]);
-  var h = Math.round(corpusSizeVals[3]);
+  var w = corpusSizeVals[2];
+  var h = corpusSizeVals[3];
 
   // use device to set axis label font size
   if (device == "mobile") {
@@ -598,13 +607,13 @@ var initializeCorpusPlot = function(selectedButton) {
 
   // add a label to the x axis
   svg.append("text")
-      .attr("class", "x label")
-      .attr("text-anchor", "end")
-      .attr("x", (w+margin.left+margin.right)/2 + 10)
-      .attr("y", h + margin.top + margin.bottom - 3)
-      .style("font-size", '"' + fontSize + '"')
-      .style("font-weight", "normal")
-      .text("Year");
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", (w+margin.left+margin.right)/2 + 10)
+    .attr("y", h + margin.top + margin.bottom - 3)
+    .style("font-size", '"' + fontSize + '"')
+    .style("font-weight", "normal")
+    .text("Year");
 
   // append x axis to DOM
   var xAxisGroup = svg.append("g")
@@ -616,7 +625,7 @@ var initializeCorpusPlot = function(selectedButton) {
   svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "end")
-    .attr("y", margin.left-55)
+    .attr("y", 0)
     .attr("x", -((h+margin.top+margin.bottom)/2) +75)
     .attr("dy", ".75em")
     .style("font-size", '"' + fontSize + '"')
@@ -662,8 +671,8 @@ var updateCorpusPlot = function(data, similarityKey) {
   var corpusSizeVals = findCorpusPlotSize();
   var device = corpusSizeVals[0];
   var margin = corpusSizeVals[1];
-  var w = Math.round(corpusSizeVals[2]);
-  var h = Math.round(corpusSizeVals[3]);
+  var w = corpusSizeVals[2];
+  var h = corpusSizeVals[3];
 
   // use the device to determine the number of ticks
   // and the size of circles
@@ -671,7 +680,7 @@ var updateCorpusPlot = function(data, similarityKey) {
     var xTickNum = 7;
     var yTickNum = 5;
     var circleSize = 3;
-    var fontSize = 10;
+    var fontSize = 8;
   } else {
     var xTickNum = 12;
     var yTickNum = 12;
@@ -700,6 +709,7 @@ var updateCorpusPlot = function(data, similarityKey) {
 
   d3.select(".y.label")
     .attr("x", -((h+margin.top+margin.bottom)/2) +75)
+    .attr("y", 0);
 
   // update x and y axes
   d3.select(".y.axis")
