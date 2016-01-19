@@ -80,7 +80,7 @@
                         <a class="page-scroll" href="#passage-plot">Passage View</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#portfolio">About</a>
+                        <a class="page-scroll" href="#about-section">About</a>
                     </li>
                </ul>
             </div>
@@ -131,7 +131,7 @@
                     <p class="text-muted">Search inidividual poems for influential and imitative passages.</p> 
                 </div>
                 <div class="col-md-4">
-                  <a class="page-scroll" href="#portfolio">
+                  <a class="page-scroll" href="#about-section">
                     <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
                         <i class="fa fa-code-fork fa-stack-1x fa-inverse"></i>
@@ -193,7 +193,7 @@
  
     
     <!-- About Section -->
-    <section id="portfolio">
+    <section id="about-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -202,44 +202,44 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 col-sm-6 portfolio-item">
-                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
+                <div class="col-md-4 col-sm-6 about-section-item">
+                    <a href="#about-sectionModal1" class="about-section-link" data-toggle="modal">
+                        <div class="about-section-hover">
+                            <div class="about-section-hover-content">
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="img/portfolio/books.png" class="img-responsive" alt="">
+                        <img src="img/about-section/books.png" class="img-responsive" alt="">
                     </a>
-                    <div class="portfolio-caption">
+                    <div class="about-section-caption">
                         <h4>Corpus View</h4>
                         <p class="text-muted">Read about the analysis used to generate the corpus view</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
+                <div class="col-md-4 col-sm-6 about-section-item">
+                    <a href="#about-sectionModal2" class="about-section-link" data-toggle="modal">
+                        <div class="about-section-hover">
+                            <div class="about-section-hover-content">
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="img/portfolio/illuminated-manuscript.png" class="img-responsive" alt="">
+                        <img src="img/about-section/illuminated-manuscript.png" class="img-responsive" alt="">
                     </a>
-                    <div class="portfolio-caption">
+                    <div class="about-section-caption">
                         <h4>Passage View</h4>
                         <p class="text-muted">Read about the methods used to generate the passage view</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
+                <div class="col-md-4 col-sm-6 about-section-item">
+                    <a href="#about-sectionModal3" class="about-section-link" data-toggle="modal">
+                        <div class="about-section-hover">
+                            <div class="about-section-hover-content">
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img src="img/portfolio/source-code.png" class="img-responsive" alt="">
+                        <img src="img/about-section/source-code.png" class="img-responsive" alt="">
                     </a>
-                    <div class="portfolio-caption">
+                    <div class="about-section-caption">
                         <h4>Source Code</h4>
                         <p class="text-muted">Find links to the source code and associated dependencies</p>
                     </div>
@@ -280,7 +280,7 @@
     <!-- Portfolio Modals -->
 
     <!-- Portfolio Modal 1 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="about-section-modal modal fade" id="about-sectionModal1" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -295,7 +295,7 @@
                             <!-- Project Details Go Here -->
                             <h2>Corpus View Details</h2>
                             <p class="item-intro text-muted center">Read below to learn about the methods used to generate the corpus view.</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/books-full.png" alt="">
+                            <img class="img-responsive img-centered" src="img/about-section/books-full.png" alt="">
                             <p>The corpus view visualizes the degree to which each poem within the corpus imitates earlier poems and influences later poems. To perform these measurements, the corpus is processed in the following way:<br><br>
 
 Each poem is split into a list of stanzas. For each stanza, the number of times each possible three character sequence {'aaa', 'aab', ... 'zzz'} occurs is counted. These counts are then used to perform an <a href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">Approximate Nearest Neighbors</a> search that determines the passages that are most similar to a given passage. Each passage is then compared to its nearest neighbors using Python's <a href="https://docs.python.org/2/library/difflib.html#sequencematcher-objects">Difflib.Sequencematcher()</a> function, and these scores are used to represent passage-level similarities. Given these similarity scores, each poem's similarity to earlier and later works is then calculated as follows:<br><br>
@@ -311,7 +311,7 @@ For each segment of each poem, the nearest neighbors are divided into those that
     </div>
 
     <!-- Portfolio Modal 2 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="about-section-modal modal fade" id="about-sectionModal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -325,7 +325,7 @@ For each segment of each poem, the nearest neighbors are divided into those that
                         <div class="modal-body">
                             <h2>Passage View Details</h2>
                             <p class="item-intro text-muted center">Read below to learn about the methods used to generate the passage view.</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/illuminated-manuscript-full.png" alt="">
+                            <img class="img-responsive img-centered" src="img/about-section/illuminated-manuscript-full.png" alt="">
                               <p>The passage view visualizes the passages that are most similar to each passage in the corpus. Each passage from a user-specified poem is analyzed to find its most similar passages, and each of those similar passages is visualized as a point in the plot. The similarity scores are calculated as follows:<br><br>
 
 Each poem is split into a list of stanzas. For each stanza, the number of times each possible three character sequence {'aaa', 'aab', ... 'zzz'} occurs is counted. These counts are then used to perform an <a href="https://en.wikipedia.org/wiki/Nearest_neighbor_search#Approximate_nearest_neighbor">Approximate Nearest Neighbors</a> search that determines the passages that are most similar to a given passage. Each passage is then compared to its nearest neighbors using Python's <a href="https://docs.python.org/2/library/difflib.html#sequencematcher-objects">Difflib.Sequencematcher()</a> function, and these scores are used to represent passage-level similarities.
@@ -339,7 +339,7 @@ Each poem is split into a list of stanzas. For each stanza, the number of times 
     </div>
 
     <!-- Portfolio Modal 3 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="about-section-modal modal fade" id="about-sectionModal3" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -354,7 +354,7 @@ Each poem is split into a list of stanzas. For each stanza, the number of times 
                             <!-- Project Details Go Here -->
                             <h2>Source Code</h2>
                             <p class="item-intro text-muted center">Read below for links to the project's source code and associated dependencies.</p>
-                            <img class="img-responsive img-centered" src="img/portfolio/source-code-full.png" alt="">
+                            <img class="img-responsive img-centered" src="img/about-section/source-code-full.png" alt="">
                               <p>This site was built on <a href="http://d3js.org/">d3.js</a>, <a href="https://twitter.github.io/typeahead.js/">typeahead.js</a>, <a href="http://getbootstrap.com/">Bootstrap</a>, and the <a href="https://github.com/spotify/annoy">Annoy ANN library</a> (C++, Python). Source code is available on <a href="https://github.com/duhaime/plagiary-poets">GitHub</a>. 
                             </p>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Description</button>
