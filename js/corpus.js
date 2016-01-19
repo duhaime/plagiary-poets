@@ -40,8 +40,8 @@ var findCorpusPlotSize = function (){
   } else {
     var device = "web";
     var margin = {top: 0, right: 30, left: 60, bottom: 50};
-    var w = width*.7 - margin.left - margin.right;
-    var h = width*.45 - margin.top - margin.bottom; 
+    var w = width*.6 - margin.left - margin.right;
+    var h = width*.35 - margin.top - margin.bottom; 
   };
 
   return [device, margin, w, h];
@@ -159,29 +159,42 @@ var findPassagePlotSize = function (){
   // use conditional formatting in case of mobile or web
   if (deviceWidth < 480) {
     var device = "mobile";
+
+    // set the time axis size as a function of its parent's size
+    var timelineDivWidth = $("#passageTimeLine").width();
+    var timeMargin = {top: 50, 
+        right: 15, left: 2, bottom: 0};
+    var timeWidth = timelineDivWidth - timeMargin.left - timeMargin.right;
+    var timeHeight = 60 - timeMargin.top - timeMargin.bottom;
+
+    // set the size of the passage plot and legend plots 
+    // as a function of their parents' size
+    var passagePlotDivWidth = $("#passagePlot").width();
+    var plotMargin = {top: 10, right: 5, left: 35, 
+        bottom: 35};   
+    var plotWidth = passagePlotDivWidth - plotMargin.left - plotMargin.right;
+    var plotHeight = .75*passagePlotDivWidth - plotMargin.top - plotMargin.bottom; 
+    var fontSize = "8px";
+
   } else {
     var device = "web";
+
+    // set the time axis size as a function of its parent's size
+    var timelineDivWidth = $("#passageTimeLine").width();
+    var timeMargin = {top: 50, 
+        right: 15, left: 2, bottom: 0};
+    var timeWidth = timelineDivWidth - timeMargin.left - timeMargin.right;
+    var timeHeight = 60 - timeMargin.top - timeMargin.bottom;
+
+    // set the size of the passage plot and legend plots 
+    // as a function of their parents' size
+    var passagePlotDivWidth = $("#passagePlot").width();
+    var plotMargin = {top: 10, right: 0, left: 50, 
+        bottom: 45};   
+    var plotWidth = passagePlotDivWidth - plotMargin.left - plotMargin.right;
+    var plotHeight = .75*passagePlotDivWidth - plotMargin.top - plotMargin.bottom; 
+    var fontSize = "12.5px";
   } 
-
-  ///////////////////
-  // mobile design //
-  ///////////////////
-
-  // set the time axis size as a function of its parent's size
-  var timelineDivWidth = $("#passageTimeLine").width();
-  var timeMargin = {top: 50, 
-      right: 15, left: 2, bottom: 0};
-  var timeWidth = timelineDivWidth - timeMargin.left - timeMargin.right;
-  var timeHeight = 60 - timeMargin.top - timeMargin.bottom;
-
-  // set the size of the passage plot and legend plots 
-  // as a function of their parents' size
-  var passagePlotDivWidth = $("#passagePlot").width();
-  var plotMargin = {top: 10, right: 5, left: 35, 
-      bottom: 35};   
-  var plotWidth = passagePlotDivWidth - plotMargin.left - plotMargin.right;
-  var plotHeight = .75*passagePlotDivWidth - plotMargin.top - plotMargin.bottom; 
-  var fontSize = "8px";
 
   return [device, plotMargin, plotWidth, plotHeight, 
       timeMargin, timeWidth, timeHeight, fontSize];
@@ -306,7 +319,9 @@ var initializePassagePlot = function() {
 
   // append passage legend svg to DOM
   d3.select("#passageLegend").append("svg:svg")
-   .attr("id", "passageLegendSvg");
+    .attr("id", "passageLegendSvg")
+    .attr("width", window.innerWidth/2)
+    .attr("height", plotHeight +plotMargin.top +plotMargin.bottom);
 
   // create plot using source Id for 
   // the initial view
@@ -448,7 +463,6 @@ var updatePassagePlot = function(data) {
     .duration(1000)
     .call(xAxis);
 
-
   //////////////////////////
   // scatterpoint circles //
   //////////////////////////
@@ -512,7 +526,8 @@ var updatePassagePlot = function(data) {
         .attr("cx", 5)
         .attr("cy", 20*i+15)
         .attr("r", 4)
-        .style("stroke", function(d){return colors(d.similarId)});
+        .style("stroke", function(d){return colors(d.similarId)})
+        .attr("class","legendCircle");
         
       g.append("text")
         .attr("x", 12)
@@ -526,6 +541,12 @@ var updatePassagePlot = function(data) {
 
   legends.exit()
     .remove();
+
+  // resize legend so it occupies only as much vertical space as necessary
+  var extantLegendCircles = d3.selectAll(".legendCircle")[0].length;
+  d3.select("#passageLegendSvg")
+    .attr("height", 20 * extantLegendCircles + 20);
+
 
   ///////////////
   // time axis //
