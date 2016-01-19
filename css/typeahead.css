@@ -63,7 +63,7 @@
 
 /* set the width of the typeahead box and its children */
 .twitter-typeahead {
-  width: 100%;
+  width: 70%;
 }
 
 /* set the text align on the autocomplete options to left */
