@@ -5,9 +5,9 @@
     
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
     <meta name="description" content="Visualizing historic text reuse with D3.js">
-    <meta name="author" content="Doug Duhaime">
+    <meta name="author" content="Douglas Duhaime">
 
     <title>Plagiary Poets</title>
 
@@ -161,18 +161,26 @@
     <section id="passage-plot" class="bg-light-gray">
       <div class="container">
         <div id="textSelectorContainer">
-          <div id="scrollable-dropdown-menu" class="center" style="position: relative;">
+          <div id="scrollable-dropdown-menu" class="text-center">
             <span class="fa fa-search" id="search-glass"></span>
-            <input class="typeahead" type="text" placeholder="Texts in corpus">
+            <input class="typeahead" type="text" 
+                placeholder="Search for a poem">
           </div>
         </div>
-        <div id="passagePlot" class="text-center"></div>
-        <div id="textContainer">
-          <div class="textBox" id="textBoxLeft">
+        <div class="col-xs-12" id="passageTimeLine"></div>
+        <div class="container-fluid" id="passagePlotLegendContainer">
+          <div class="row">
+            <div id="passageLegend" class="col-sm-6 col-sm-push-6"></div> 
+            <div id="passagePlot" class="col-sm-6 col-sm-pull-6"></div>
+         </div>
+        </div>
+        
+        <div id="textContainer" class="col-xs-12">
+         <div class="textBox col-xs-6" id="textBoxLeft">
             <h4 id="titleLeft"></h4>
             <div class="textBox" id="textLeft"></div>
           </div>
-          <div class="textBox" id="textBoxRight">
+          <div class="textBox col-xs-6" id="textBoxRight">
             <h4 id="titleRight"></h4>
             <div class="textBox" id="textRight"></div>
           </div>
@@ -181,7 +189,7 @@
     </section>
  
     
-    <!-- Portfolio Grid Section -->
+    <!-- About Section -->
     <section id="portfolio">
         <div class="container">
             <div class="row">
@@ -257,7 +265,7 @@
                 </div>
                 <div class="col-md-4">
                     <ul class="list-inline quicklinks">
-                        <li><a href="http://douglasduhaime.com">Doug Duhaime, 2016</a>
+                        <li><a href="http://douglasduhaime.com">Douglas Duhaime, 2016</a>
                         </li>
                         </li>
                     </ul>
@@ -344,7 +352,7 @@ Each poem is split into a list of stanzas. For each stanza, the number of times 
                             <h2>Source Code</h2>
                             <p class="item-intro text-muted center">Read below for links to the project's source code and associated dependencies.</p>
                             <img class="img-responsive img-centered" src="img/portfolio/source-code-full.png" alt="">
-                              <p>This site was built on d3.js, typeahead.js, Bootstrap, and the <a href="https://github.com/spotify/annoy">Annoy ANN library</a> (C++, Python). Source code is available on <a href="https://github.com/duhaime/plagiary-poets">GitHub</a>. 
+                              <p>This site was built on <a href="http://d3js.org/">d3.js</a>, <a href="https://twitter.github.io/typeahead.js/">typeahead.js</a>, <a href="http://getbootstrap.com/">Bootstrap</a>, and the <a href="https://github.com/spotify/annoy">Annoy ANN library</a> (C++, Python). Source code is available on <a href="https://github.com/duhaime/plagiary-poets">GitHub</a>. 
                             </p>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Description</button>
                         </div>
