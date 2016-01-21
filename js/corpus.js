@@ -325,7 +325,7 @@ var initializePassagePlot = function() {
 
   // create plot using source Id for 
   // the initial view
-  callPassagePlot(0);
+  callPassagePlot(2201);
 };
 
 
