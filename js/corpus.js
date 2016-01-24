@@ -365,7 +365,7 @@ var updatePassagePlot = function(data) {
     .style("font-size", fontSize);
 
   d3.select("#passagePlot").select(".x.label")
-    .attr("x", plotWidth * .8 )
+    .attr("x", plotWidth * .9)
     .attr("y", plotHeight + plotMargin.top + plotMargin.bottom -5)
     .style("font-size", fontSize);
 
@@ -376,7 +376,7 @@ var updatePassagePlot = function(data) {
 
   d3.select("#passagePlot").select(".y.label")
     .attr("y", 1)
-    .attr("x", -(plotHeight + plotMargin.top) * .35)
+    .attr("x", -(plotHeight + plotMargin.top) * .25)
     .style("font-size", fontSize);
 
   d3.select("#passageTimeLine").select("svg")
