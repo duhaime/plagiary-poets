@@ -6,8 +6,12 @@
   padding: 0px 0px 10px 0px;
 }
 
-#buttonContainer p {
-  margin: 0px 6px 0px 6px;
+#buttonContainer p b{
+  margin: 0px 5px 0px 5px;
+}
+
+#buttonContainer #influential {
+  margin-right: 5px;
 }
 
 /********/
