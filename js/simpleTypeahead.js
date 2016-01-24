@@ -45,7 +45,7 @@ var initializePassageTypeahead = function (sourceId) {
     });
 
     // Set the first text's title as the initial typeahead value
-    $('.typeahead').typeahead('val', corpusRecords[0].name); 
+    $('.typeahead').typeahead('val', corpusRecords[2154].name); 
   });
 };
 
