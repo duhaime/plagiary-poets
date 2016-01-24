@@ -255,8 +255,6 @@ var initializePassagePlot = function() {
 
   // draw the svg
   var svg = d3.select("#passagePlot").append("svg:svg")
-    .attr("width", plotWidth + plotMargin.left + plotMargin.right)
-    .attr("height", plotHeight + plotMargin.top + plotMargin.bottom)
     .attr("id", "passagePlotSvg");
 
   // select a subregion of the svg to create a dropbox
@@ -264,8 +262,6 @@ var initializePassagePlot = function() {
     .attr("id", "graphBox")
     .attr("x", plotMargin.left)
     .attr("y", plotMargin.top)
-    .attr("height", plotHeight)
-    .attr("width", plotWidth)
     .attr("stroke", "#c4c4c4")
     .attr("stroke-width", 1)
     .attr("fill", "#ffffff");
@@ -319,9 +315,7 @@ var initializePassagePlot = function() {
 
   // append passage legend svg to DOM
   d3.select("#passageLegend").append("svg:svg")
-    .attr("id", "passageLegendSvg")
-    .attr("width", window.innerWidth)
-    .attr("height", plotHeight +plotMargin.top +plotMargin.bottom);
+    .attr("id", "passageLegendSvg");
 
   // create plot using source Id for 
   // the initial view
