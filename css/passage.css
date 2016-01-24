@@ -29,16 +29,12 @@ svg circle:active {
 }
 
 #textContainer {
-  width: 960px;
-  height: 400px;
   margin: 0 auto;
   padding: 20px 0px 0px 26px;
   position: relative;
 }
 
 .textBox {
-  width: 450px;
-  height: 390px;
   overflow-y: auto;
   display: inline-block;
 }
