@@ -320,7 +320,7 @@ var initializePassagePlot = function() {
   // append passage legend svg to DOM
   d3.select("#passageLegend").append("svg:svg")
     .attr("id", "passageLegendSvg")
-    .attr("width", window.innerWidth/2)
+    .attr("width", window.innerWidth)
     .attr("height", plotHeight +plotMargin.top +plotMargin.bottom);
 
   // create plot using source Id for 
@@ -393,6 +393,13 @@ var updatePassagePlot = function(data) {
     .attr("transform", "translate(" + 
         (timeMargin.left) + 
         "," + (timeMargin.top) + ")");
+
+  // append passage legend svg to DOM
+  d3.select("#passageLegend").select("svg")
+    .attr("width", window.innerWidth)
+    .attr("height", plotHeight +plotMargin.top +plotMargin.bottom);
+
+
 
 
   ///////////////////
